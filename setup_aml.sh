@@ -3,7 +3,7 @@
 PROJECT_DIR=${PWD##*/}
 LOCATION="germanywestcentral"
 COMPUTE_SIZE="Standard_E4ds_v4"
-CONDA_FILE="environment.yml"
+CONDA_FILE="conda.yml"
 ENV_IMAGE="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04"
 
 read -p "Azure Subscription ID: " SUBSCRIPTION_ID
