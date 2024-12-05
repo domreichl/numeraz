@@ -4,6 +4,8 @@ PROJECT_DIR=${PWD##*/}
 LOCATION="germanywestcentral"
 COMPUTE_SIZE="Standard_E4ds_v4"
 
+read -p "Azure Subscription ID: " SUBSCRIPTION_ID
+
 echo "Installing Azure CLI"
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
@@ -25,6 +27,7 @@ az ml compute create -n "${PROJECT_DIR}-ci01" -t ComputeInstance --size ${COMPUT
 
 cat <<EOF > resources.json
 {
+  "subscription_id": "${SUBSCRIPTION_ID}",
   "resource_group": "${PROJECT_DIR}-rg",
   "workspace_name": "${PROJECT_DIR}-ws",
   "compute_instance": "${PROJECT_DIR}-ci01"
