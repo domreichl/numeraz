@@ -23,3 +23,10 @@ az ml workspace create -n "${PROJECT_DIR}-ws" -g "${PROJECT_DIR}-rg" -l ${LOCATI
 echo "Creating a compute instance"
 az ml compute create -n "${PROJECT_DIR}-ci01" -t ComputeInstance --size ${COMPUTE_SIZE} -g "${PROJECT_DIR}-rg" -w "${PROJECT_DIR}-ws"
 
+cat <<EOF > resources.json
+{
+  "resource_group": "${PROJECT_DIR}-rg",
+  "workspace_name": "${PROJECT_DIR}-ws",
+  "compute_instance": "${PROJECT_DIR}-ci01"
+}
+EOF
