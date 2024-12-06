@@ -1,13 +1,12 @@
 [project]
 name = "numeraz"
-version = "0.1.0"
+version = "0.1.1"
 description = "Numerai Model Development with Azure ML"
 readme = "README.md"
 requires-python = ">=3.11.10"
 dependencies = [
     "azure-ai-ml>=1.22.4",
     "azureml-fsspec>=1.3.1",
-    "jupyter>=1.1.1",
     "numerapi>=2.19.1",
     "pyarrow>=18.1.0",
 ]
