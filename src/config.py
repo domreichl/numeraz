@@ -4,12 +4,14 @@ import datetime as dt
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import Environment
 from azure.identity import DefaultAzureCredential
+from pathlib import Path
 
 
 @dataclass
 class Config:
     def __init__(self):
-        self.local_data_dir = "data"
+        self.src_path = str(Path(__file__).parent)
+        self.experiment_name = "initial"
         self.numerai_data_version = "v5.0"
         self.data_asset_name = "numerai"
         self.data_asset_version = dt.datetime.now().strftime("%Y-%m")
