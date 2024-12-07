@@ -1,5 +1,7 @@
 import click
 from azure.ai.ml import command, MLClient
+from azure.ai.ml.entities import Environment
+
 
 from config import Config
 
@@ -26,12 +28,34 @@ def job(script_name: str):
     job = command(
         command=cmd,
         code=f"{config.src_path}/scripts/{script_name}.py",
-        environment=config.get_latest_env(ml_client),
+        environment=config.get_latest_env_name(ml_client),
         compute=config.compute_instance,
         display_name=script_name,
         experiment_name=config.experiment_name,
     )
     ml_client.create_or_update(job)
+
+
+@cli.command()
+@click.argument("entity")
+def update(entity):
+    config = Config()
+    ml_client: MLClient = config.get_ml_client()
+
+    match entity:
+        case "conda":
+            env: Environment = config.get_latest_env(ml_client)
+            updated_env = Environment(
+                name=env.name,
+                version=str(int(env.version) + 1),
+                description=env.description,
+                image=env.image,
+                conda_file="conda.yml",
+                tags=env.tags,
+            )
+            ml_client.create_or_update(updated_env)
+        case _:
+            raise Exception(f"Update of entity '{entity}' is not implemented")
 
 
 if __name__ == "__main__":

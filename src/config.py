@@ -31,9 +31,12 @@ class Config:
             workspace_name=self.workspace_name,
         )
 
-    def get_latest_env(self, ml_client: MLClient) -> str:
-        env: Environment = max(
+    def get_latest_env(self, ml_client: MLClient) -> Environment:
+        return max(
             ml_client.environments.list(self.environment_name),
             key=lambda env: env.version,
         )
+
+    def get_latest_env_name(self, ml_client: MLClient) -> str:
+        env: Environment = self.get_latest_env(ml_client)
         return f"{env.name}:{env.version}"
