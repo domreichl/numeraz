@@ -11,7 +11,15 @@ dependencies = [
     "mlflow>=2.18.0",
     "numerai-tools>=0.2.3",
     "numerapi>=2.19.1",
+    "pytest>=8.3.4",
     "scikit-learn>=1.5.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::marshmallow.warnings.RemovedInMarshmallow4Warning",
 ]
 
 [project.scripts]
