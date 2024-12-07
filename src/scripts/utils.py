@@ -1,6 +1,4 @@
 from argparse import ArgumentParser, Namespace
-from azure.ai.ml import MLClient
-from azure.ai.ml.entities import Environment
 
 
 def parse_args(args: list) -> dict:
@@ -9,15 +7,3 @@ def parse_args(args: list) -> dict:
         parser.add_argument(f"--{arg}", type=str, required=True)
     args: Namespace = parser.parse_args()
     return vars(args)
-
-
-def update_conda(conda_file_path: str, env: Environment, ml_client: MLClient):
-    updated_env = Environment(
-        name=env.name,
-        version=str(int(env.version) + 1),
-        description=env.description,
-        image=env.image,
-        conda_file=conda_file_path,
-        tags=env.tags,
-    )
-    ml_client.create_or_update(updated_env)

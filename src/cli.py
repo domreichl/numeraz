@@ -4,7 +4,6 @@ from azure.ai.ml.entities import Environment
 
 
 from config import Config
-from scripts import utils
 
 
 @click.group()
@@ -52,7 +51,15 @@ def update(entity):
     match entity:
         case "conda":
             env: Environment = config.get_latest_env(ml_client)
-            utils.update_conda(config.conda_file_path, env, ml_client)
+            updated_env = Environment(
+                name=env.name,
+                version=str(int(env.version) + 1),
+                description=env.description,
+                image=env.image,
+                conda_file="conda.yml",
+                tags=env.tags,
+            )
+            ml_client.create_or_update(updated_env)
         case _:
             raise Exception(f"Update of entity '{entity}' is not implemented")
 
