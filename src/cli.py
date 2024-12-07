@@ -17,18 +17,24 @@ def cli():
 def job(script_name: str):
     config = Config()
     ml_client: MLClient = config.get_ml_client()
+    default_args = f" \
+        --data_asset_name {config.data_asset_name} \
+        --data_asset_version {config.data_asset_version} \
+        --experiment_name {config.experiment_name} \
+        --subscription_id {config.subscription_id} \
+        --resource_group {config.resource_group} \
+        --workspace_name {config.workspace_name}"
+    cmd = f"python {script_name}.py" + default_args
 
     match script_name:
         case "create_data_asset":
-            cmd = f"python {script_name}.py -n {config.data_asset_name} -v {config.data_asset_version} \
-                -ndv {config.numerai_data_version} -exp {config.experiment_name} \
-                -sid {config.subscription_id} -rg {config.resource_group} -ws {config.workspace_name}"
+            cmd += f" --numerai_data_version {config.numerai_data_version}"
         case _:
             raise Exception(f"Script '{script_name}' is not implemented")
 
     job = command(
         command=cmd,
-        code=f"{config.src_path}/scripts/{script_name}.py",
+        code=f"{config.src_path}/scripts",
         environment=config.get_latest_env_name(ml_client),
         compute=config.compute_instance,
         display_name=script_name,
