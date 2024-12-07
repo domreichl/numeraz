@@ -22,6 +22,7 @@ class Config:
         self.workspace_name = resources["workspace_name"]
         self.compute_instance = resources["compute_instance"]
         self.environment_name = resources["environment_name"]
+        self.conda_file_path = str(Path(__file__).parent.parent / "conda.yml")
 
     def get_ml_client(self) -> MLClient:
         return MLClient(
