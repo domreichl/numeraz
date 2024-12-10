@@ -37,7 +37,7 @@ def component(name: str):
 
 @cli.command()
 def update_conda():
-    env: Environment = get_latest_env(ml_client)
+    env: Environment = get_latest_env(config, ml_client)
     updated_env = Environment(
         name=env.name,
         version=str(int(env.version) + 1),

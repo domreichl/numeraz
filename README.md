@@ -16,4 +16,4 @@
 - Register a component: `naz component <component_name>`
 
 ### Updates
-- Update the virtual environment: `naz update_conda`
+- Update the virtual environment: `naz update-conda`

@@ -115,7 +115,7 @@ wheels = [
 
 [[package]]
 name = "azure-storage-blob"
-version = "12.24.0"
+version = "12.19.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "azure-core" },
@@ -123,14 +123,14 @@ dependencies = [
     { name = "isodate" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/fe/f6/5a94fa935933c8483bf27af0140e09640bd4ee5b2f346e71eee06c197482/azure_storage_blob-12.24.0.tar.gz", hash = "sha256:eaaaa1507c8c363d6e1d1342bd549938fdf1adec9b1ada8658c8f5bf3aea844e", size = 569613 }
+sdist = { url = "https://files.pythonhosted.org/packages/fd/f8/59c209132b3b2993402df6b7e79728726927b53168624e917cd9daaffea8/azure-storage-blob-12.19.0.tar.gz", hash = "sha256:26c0a4320a34a3c2a1b74528ba6812ebcb632a04cd67b1c7377232c4b01a5897", size = 551109 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e2/f8/ef0f76f8c424bedd20c685409836ddfb42ac76fd8a0f21c3c3659cf7207d/azure_storage_blob-12.24.0-py3-none-any.whl", hash = "sha256:4f0bb4592ea79a2d986063696514c781c9e62be240f09f6397986e01755bc071", size = 408579 },
+    { url = "https://files.pythonhosted.org/packages/f6/82/24b0d7cf67ea63af86f11092756b8fe2adc1d55323241dc4107f5f5748e2/azure_storage_blob-12.19.0-py3-none-any.whl", hash = "sha256:7bbc2c9c16678f7a420367fef6b172ba8730a7e66df7f4d7a55d5b3c8216615b", size = 394221 },
 ]
 
 [[package]]
 name = "azure-storage-file-datalake"
-version = "12.18.0"
+version = "12.14.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "azure-core" },
@@ -138,9 +138,9 @@ dependencies = [
     { name = "isodate" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/03/11/12b3e6a3d3186d03d42ffa9e486b4dd967c4e60566673ce64f8f5d296e01/azure_storage_file_datalake-12.18.0.tar.gz", hash = "sha256:2b2b88c1c11b2158ee1fad373df2f576acfcd27b83ad1fa3b4989bbdd63dd72a", size = 277727 }
+sdist = { url = "https://files.pythonhosted.org/packages/92/86/afa6634f1c1a4e5de001f81713d31d6cd1c1afeac82fb109150bab753151/azure-storage-file-datalake-12.14.0.tar.gz", hash = "sha256:358f1616db479b8272b74fb7d5f10f93dfc695a264137dd1959b50b50dcd6346", size = 269933 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/76/a0/15949fd270193a1f1b32c791dd678a71341cb9d982edbe849ff3ea50546f/azure_storage_file_datalake-12.18.0-py3-none-any.whl", hash = "sha256:e7fe222af632a60c98ba50aa965c217451476ba74ecb87d246a5d746be3916e2", size = 258424 },
+    { url = "https://files.pythonhosted.org/packages/6c/11/c68aefed0e87c565451d85a8cc0aee56334a6f9e6311bbfbdbf5e65f8c0d/azure_storage_file_datalake-12.14.0-py3-none-any.whl", hash = "sha256:736b565e8c46fc0a36f64102d5fa63e1367b698496d845b7572fc7cad4925cec", size = 251024 },
 ]
 
 [[package]]
@@ -211,6 +211,26 @@ dependencies = [
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/61/07/d467f174509d19b9f89018b59500901fdcabb7e83aad35a49aa1d76663d1/azureml_fsspec-1.3.1-py3-none-any.whl", hash = "sha256:a0cf479e74bb213513a9995c7131f83e15b85cf7fb3a9fe56e65aad8c24b04f8", size = 16287 },
+]
+
+[[package]]
+name = "azureml-mlflow"
+version = "1.58.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "azure-common" },
+    { name = "azure-core" },
+    { name = "azure-identity" },
+    { name = "azure-mgmt-core" },
+    { name = "azure-storage-blob" },
+    { name = "cryptography" },
+    { name = "jsonpickle" },
+    { name = "mlflow-skinny" },
+    { name = "msrest" },
+    { name = "python-dateutil" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/05/87/844688b416cc2158c7d5e527d7286ecc62be9ec2f290d8c6fa430140a31b/azureml_mlflow-1.58.0-py3-none-any.whl", hash = "sha256:dac8fd9236419af934d8b9b7a426fbf4ecada0f37f33733a380d42dd65859f09", size = 1019701 },
 ]
 
 [[package]]
@@ -785,6 +805,15 @@ wheels = [
 ]
 
 [[package]]
+name = "jsonpickle"
+version = "4.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/04/b7/9fb3cb5915f7363ceea7eb433866a69e8c01b43201daf368afd5c2ff722b/jsonpickle-4.0.0.tar.gz", hash = "sha256:fc670852b204d77601b08f8f9333149ac37ab6d3fe4e6ed3b578427291f63736", size = 314587 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a1/64/815460f86d94c9e1431800a75061719824c6fef14d88a6117eba3126cd5b/jsonpickle-4.0.0-py3-none-any.whl", hash = "sha256:53730b9e094bc41f540bfdd25eaf6e6cf43811590e9e1477abcec44b866ddcd9", size = 46157 },
+]
+
+[[package]]
 name = "jsonschema"
 version = "4.23.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1141,6 +1170,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "azure-ai-ml" },
     { name = "azureml-fsspec" },
+    { name = "azureml-mlflow" },
     { name = "click" },
     { name = "lightgbm" },
     { name = "mlflow" },
@@ -1154,6 +1184,7 @@ dependencies = [
 requires-dist = [
     { name = "azure-ai-ml", specifier = ">=1.22.4" },
     { name = "azureml-fsspec", specifier = ">=1.3.1" },
+    { name = "azureml-mlflow", specifier = ">=1.58.0" },
     { name = "click", specifier = ">=8.1.7" },
     { name = "lightgbm", specifier = ">=4.5.0" },
     { name = "mlflow", specifier = ">=2.18.0" },
