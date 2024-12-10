@@ -88,7 +88,7 @@ class DataPreprocessor:
             df = df[df["data_type"] != "test"]
             del df["data_type"]
         elif name == "meta_model":
-            pd.read_parquet(path)["numerai_meta_model"]
+            df = pd.read_parquet(path)["numerai_meta_model"]
 
         return df
 
