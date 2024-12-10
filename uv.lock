@@ -159,6 +159,61 @@ wheels = [
 ]
 
 [[package]]
+name = "azureml-dataprep"
+version = "5.1.6"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "azure-identity" },
+    { name = "azureml-dataprep-native" },
+    { name = "azureml-dataprep-rslex" },
+    { name = "cloudpickle" },
+    { name = "jsonschema" },
+    { name = "pyyaml" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/10/c2/f7e3d0429c8bcf538d83aeb71ec4ef6066de42d453fd93fce5fb451fe79b/azureml_dataprep-5.1.6-py3-none-any.whl", hash = "sha256:8f0a05d56e7cb78a57794fdcf9b38d42244d0918e8694117322ef2c5844baf55", size = 252358 },
+]
+
+[[package]]
+name = "azureml-dataprep-native"
+version = "41.0.0"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e4/9f/9d833436af85b1ff2da6e36b999ba6a894eaba448bfe5ef500412efb947b/azureml_dataprep_native-41.0.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:649a798e3c56286be587388aabd94d2f32c083633b41fffddde25d0bdc1d8ca3", size = 130373 },
+    { url = "https://files.pythonhosted.org/packages/41/c1/076c7e6ed22283694462aecbb353e2b292b03a8f125d42a0e24932075ab7/azureml_dataprep_native-41.0.0-cp311-cp311-manylinux1_x86_64.whl", hash = "sha256:1aa293660540be8a9f8cec1d572cca90486e5e34e978c4948c135785996d17a2", size = 187711 },
+    { url = "https://files.pythonhosted.org/packages/ea/75/81422f038c07831910c1ebbfc98fb9aabfda4f326d7570d1ad67523e33d5/azureml_dataprep_native-41.0.0-cp311-cp311-win_amd64.whl", hash = "sha256:7a42781a6cdf0b8e4b028eaabe71518dc6e3660f804ce14bcb716f8e3deeedb0", size = 893326 },
+    { url = "https://files.pythonhosted.org/packages/f3/0f/5b1e5cbe1945c52c01447341aad3fd99106221468f5aaff958137a72e919/azureml_dataprep_native-41.0.0-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:fa41adceba611988748aaa5d16bd9090f2208cdc6b5950bb0672b546d9e7d7af", size = 130697 },
+    { url = "https://files.pythonhosted.org/packages/0d/f2/42672c1c14db109db6b323a3d84180a79f113532626ff2b4ac635111e0a1/azureml_dataprep_native-41.0.0-cp312-cp312-manylinux1_x86_64.whl", hash = "sha256:da6117b31175a8601b84ddd8c3318e43dcbe188743844b55146559871526ff98", size = 188298 },
+    { url = "https://files.pythonhosted.org/packages/58/b8/aed80f0eff35fae9094bfb6c80d441106a743def5e6f94e2132ccd51676e/azureml_dataprep_native-41.0.0-cp312-cp312-win_amd64.whl", hash = "sha256:d94d9364239abbb523d0c69957a3d30ae735a41766f3469099fb92047ebc2ff5", size = 901102 },
+]
+
+[[package]]
+name = "azureml-dataprep-rslex"
+version = "2.22.5"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/62/dc/da9c25d3a93232fb108261b76e7a8fc5c89035afa053917d429aa955cb32/azureml_dataprep_rslex-2.22.5-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:dbaf294f81212c351081c75f1e5680fc5b0416d1a39a9c775721861df20ce9aa", size = 19359684 },
+    { url = "https://files.pythonhosted.org/packages/c5/b8/35273d36204d77d58a0d7ac9ef95f348497554d1109dd327b202de84faf0/azureml_dataprep_rslex-2.22.5-cp311-cp311-manylinux1_x86_64.whl", hash = "sha256:bfdac924dacc976219e8bd52b2509d3cd1f513dc0df2fd224f8f16d5ff20fa15", size = 24751737 },
+    { url = "https://files.pythonhosted.org/packages/98/0a/432755b2218bf2e520ffb8c7273f90849afc3dd904247c60df09f063a93f/azureml_dataprep_rslex-2.22.5-cp311-cp311-win_amd64.whl", hash = "sha256:2c90f179f7d9093e9e01f95d55c81b3ed0564465a9a1018e8ca15b5ac4ff558e", size = 18300380 },
+    { url = "https://files.pythonhosted.org/packages/81/70/28044acd0065aef57955ce22c299d5f9177716f86d8a7d14a52b4da7b186/azureml_dataprep_rslex-2.22.5-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:6c73aee3f0c5bd052b7e59a0f2749bae5c493478b860d5bcab39ef53ca661ba8", size = 19362722 },
+    { url = "https://files.pythonhosted.org/packages/fd/7f/adfd8ce27ae2c44384200a4839966c41381e346aeb0acc06464fe73371de/azureml_dataprep_rslex-2.22.5-cp312-cp312-manylinux1_x86_64.whl", hash = "sha256:f62aec1611eba6328b088bd4819c5fd09b6b166db5f962f1bad17e3945c5bbcd", size = 24751129 },
+    { url = "https://files.pythonhosted.org/packages/3e/76/9282c354d10944138360cd3048a550297e617305c235d5b645dcc5b754bd/azureml_dataprep_rslex-2.22.5-cp312-cp312-win_amd64.whl", hash = "sha256:1e284a2aad04e5cb4a7ba63a2eb457b610e7d80a078b11b86c5e8449779cdd40", size = 18304313 },
+]
+
+[[package]]
+name = "azureml-fsspec"
+version = "1.3.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "azureml-dataprep" },
+    { name = "fsspec" },
+    { name = "pytz" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/61/07/d467f174509d19b9f89018b59500901fdcabb7e83aad35a49aa1d76663d1/azureml_fsspec-1.3.1-py3-none-any.whl", hash = "sha256:a0cf479e74bb213513a9995c7131f83e15b85cf7fb3a9fe56e65aad8c24b04f8", size = 16287 },
+]
+
+[[package]]
 name = "blinker"
 version = "1.9.0"
 source = { registry = "https://pypi.org/simple" }
@@ -298,11 +353,11 @@ wheels = [
 
 [[package]]
 name = "cloudpickle"
-version = "3.1.0"
+version = "2.2.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/97/c7/f746cadd08c4c08129215cf1b984b632f9e579fc781301e63da9e85c76c1/cloudpickle-3.1.0.tar.gz", hash = "sha256:81a929b6e3c7335c863c771d673d105f02efdb89dfaba0c90495d1c64796601b", size = 66155 }
+sdist = { url = "https://files.pythonhosted.org/packages/5f/51/913ecca3970a2227cf4d5e8937df52cc28f465ac442216110b8e3323262d/cloudpickle-2.2.1.tar.gz", hash = "sha256:d89684b8de9e34a2a43b3460fbca07d09d6e25ce858df4d5a44240403b6178f5", size = 60800 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/48/41/e1d85ca3cab0b674e277c8c4f678cf66a91cd2cecf93df94353a606fe0db/cloudpickle-3.1.0-py3-none-any.whl", hash = "sha256:fe11acda67f61aaaec473e3afe030feb131d78a43461b718185363384f1ba12e", size = 22021 },
+    { url = "https://files.pythonhosted.org/packages/15/80/44286939ca215e88fa827b2aeb6fa3fd2b4a7af322485c7170d6f9fd96e0/cloudpickle-2.2.1-py3-none-any.whl", hash = "sha256:61f594d1f4c295fa5cd9014ceb3a1fc4a70b0de1164b94fbc2d854ccba056f9f", size = 25944 },
 ]
 
 [[package]]
@@ -493,6 +548,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/f6/c8/c5aed715d3816977451d2eaf4ab3aaad48e8d8a3e25d28a4d29a07b0f841/fonttools-4.55.2-cp313-cp313-win32.whl", hash = "sha256:81ccd2b3a420b8050c7d9db3be0555d71662973b3ef2a1d921a2880b58957db8", size = 2149187 },
     { url = "https://files.pythonhosted.org/packages/c4/07/36df0ee4ba78b8eb4880b8bbc0d96cc97b98d358ff4a74b469bda851f63e/fonttools-4.55.2-cp313-cp313-win_amd64.whl", hash = "sha256:d559eb1744c7dcfa90ae60cb1a4b3595e898e48f4198738c321468c01180cd83", size = 2195113 },
     { url = "https://files.pythonhosted.org/packages/69/94/c4d8dfe26a971e00e34df99b46e9518425f59918c8993830e904171e21f9/fonttools-4.55.2-py3-none-any.whl", hash = "sha256:8e2d89fbe9b08d96e22c7a81ec04a4e8d8439c31223e2dc6f2f9fc8ff14bdf9f", size = 1100792 },
+]
+
+[[package]]
+name = "fsspec"
+version = "2023.10.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a4/f7/16ec1f92523165d10301cfa8cb83df0356dbe615d4ca5ed611a16f53e09a/fsspec-2023.10.0.tar.gz", hash = "sha256:330c66757591df346ad3091a53bd907e15348c2ba17d63fd54f5c39c4457d2a5", size = 165452 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e8/f6/3eccfb530aac90ad1301c582da228e4763f19e719ac8200752a4841b0b2d/fsspec-2023.10.0-py3-none-any.whl", hash = "sha256:346a8f024efeb749d2a5fca7ba8854474b1ff9af7c3faaf636a4548781136529", size = 166384 },
 ]
 
 [[package]]
@@ -1076,6 +1140,7 @@ version = "0.1.1"
 source = { virtual = "." }
 dependencies = [
     { name = "azure-ai-ml" },
+    { name = "azureml-fsspec" },
     { name = "click" },
     { name = "lightgbm" },
     { name = "mlflow" },
@@ -1088,6 +1153,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "azure-ai-ml", specifier = ">=1.22.4" },
+    { name = "azureml-fsspec", specifier = ">=1.3.1" },
     { name = "click", specifier = ">=8.1.7" },
     { name = "lightgbm", specifier = ">=4.5.0" },
     { name = "mlflow", specifier = ">=2.18.0" },
