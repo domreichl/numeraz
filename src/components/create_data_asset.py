@@ -3,10 +3,10 @@ from azure.ai.ml.entities import Data
 from azure.identity import DefaultAzureCredential
 from numerapi import NumerAPI
 
-from utils import parse_args
+from components import parse_args
 
 
-TMP_DATA_DIR = "./data"
+DATA_DIR = "./data"
 args: dict = parse_args(
     [
         "data_asset_name",
@@ -31,7 +31,7 @@ try:
         name=args["data_asset_name"], version=args["data_asset_version"]
     )
     print(
-        f"Data asset '{args['data_asset_name']}' with version '{args['data_asset_version']}' already exists."
+        f"Data asset '{args['data_asset_name']}' with version '{args['data_asset_version']}' already exists"
     )
 except:
     for fn in [
@@ -43,16 +43,19 @@ except:
     ]:
         numerapi.download_dataset(
             filename=f"{args['numerai_data_version']}/{fn}",
-            dest_path=f"{TMP_DATA_DIR}/{fn}",
+            dest_path=f"{DATA_DIR}/{fn}",
         )
     data_asset = ml_client.data.create_or_update(
         Data(
             name=args["data_asset_name"],
             version=args["data_asset_version"],
             description=f"Numerai {args['numerai_data_version']} Data",
-            path=TMP_DATA_DIR,
+            path=DATA_DIR,
             type="uri_folder",
         )
+    )
+    print(
+        f"Created data asset '{args['data_asset_name']}' with version '{args['data_asset_version']}'"
     )
 
 print("Path:", data_asset.path)
