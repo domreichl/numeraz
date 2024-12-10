@@ -6,8 +6,14 @@
 1. Create Azure ML resources: `sh setup_aml.sh`
 
 ## Usage
+### Pipelines
+- TODO
+
 ### Jobs
-- Create data asset: `naz job create_data_asset`
+- Run a job: `naz job <component_name>`
+
+### Components
+- Register a component: `naz component <component_name>`
 
 ### Updates
-- Update environment: `naz update conda`
+- Update the virtual environment: `naz update_conda`
