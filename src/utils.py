@@ -2,8 +2,8 @@ from azure.ai.ml import MLClient
 from azure.ai.ml.entities import Component, Environment, Job
 from azure.identity import DefaultAzureCredential
 
-from src.components import Components
-from src.config import Config
+from components import Components
+from config import Config
 
 
 def get_ml_client(config: Config) -> MLClient:

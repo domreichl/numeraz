@@ -2,8 +2,8 @@ import click
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import Environment
 
-from src.config import Config
-from src.utils import (
+from config import Config
+from utils import (
     get_ml_client,
     get_latest_env,
     get_latest_env_name,
@@ -18,7 +18,7 @@ def cli():
 
 
 config = Config()
-ml_client: MLClient = get_ml_client()
+ml_client: MLClient = get_ml_client(config)
 config.latest_env_name = get_latest_env_name(config, ml_client)
 
 
