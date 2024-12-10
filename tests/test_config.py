@@ -21,9 +21,9 @@ def test_get_latest_env():
     assert env.name == "numeraz-env"
 
 
-def test_get_latest_env_name():
-    env_name: str = config.get_latest_env_name(ml_client)
-    name, version = env_name.split(":")
+def test_set_latest_env_name():
+    config.set_latest_env_name(ml_client)
+    name, version = config.latest_env_name.split(":")
 
     assert name == "numeraz-env"
     assert int(version) >= 0

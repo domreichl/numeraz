@@ -11,6 +11,7 @@ from pathlib import Path
 class Config:
     def __init__(self):
         self.src_path = str(Path(__file__).parent)
+        self.feature_set = "medium"
         self.experiment_name = "initial"
         self.numerai_data_version = "v5.0"
         self.data_asset_name = "numerai"
@@ -23,6 +24,7 @@ class Config:
         self.compute_instance = resources["compute_instance"]
         self.environment_name = resources["environment_name"]
         self.conda_file_path = str(Path(__file__).parent.parent / "conda.yml")
+        self.latest_env_name = None
 
     def get_ml_client(self) -> MLClient:
         return MLClient(
@@ -38,6 +40,6 @@ class Config:
             key=lambda env: env.version,
         )
 
-    def get_latest_env_name(self, ml_client: MLClient) -> str:
+    def set_latest_env_name(self, ml_client: MLClient):
         env: Environment = self.get_latest_env(ml_client)
-        return f"{env.name}:{env.version}"
+        self.latest_env_name = f"{env.name}:{env.version}"
