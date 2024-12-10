@@ -2,8 +2,14 @@ import click
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import Environment
 
-from config import Config
-from utils import run_job, register_component
+from src.config import Config
+from src.utils import (
+    get_ml_client,
+    get_latest_env,
+    get_latest_env_name,
+    run_job,
+    register_component,
+)
 
 
 @click.group()
@@ -12,8 +18,8 @@ def cli():
 
 
 config = Config()
-ml_client: MLClient = config.get_ml_client()
-config.set_latest_env_name(ml_client)
+ml_client: MLClient = get_ml_client()
+config.latest_env_name = get_latest_env_name(config, ml_client)
 
 
 @cli.command()
@@ -31,7 +37,7 @@ def component(name: str):
 
 @cli.command()
 def update_conda():
-    env: Environment = config.get_latest_env(ml_client)
+    env: Environment = get_latest_env(ml_client)
     updated_env = Environment(
         name=env.name,
         version=str(int(env.version) + 1),

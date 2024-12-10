@@ -1,8 +1,30 @@
 from azure.ai.ml import MLClient
-from azure.ai.ml.entities import Component, Job
+from azure.ai.ml.entities import Component, Environment, Job
+from azure.identity import DefaultAzureCredential
 
-from components import Components
-from config import Config
+from src.components import Components
+from src.config import Config
+
+
+def get_ml_client(config: Config) -> MLClient:
+    return MLClient(
+        credential=DefaultAzureCredential(),
+        subscription_id=config.subscription_id,
+        resource_group_name=config.resource_group,
+        workspace_name=config.workspace_name,
+    )
+
+
+def get_latest_env(config: Config, ml_client: MLClient) -> Environment:
+    return max(
+        ml_client.environments.list(config.environment_name),
+        key=lambda env: env.version,
+    )
+
+
+def get_latest_env_name(config: Config, ml_client: MLClient) -> str:
+    env: Environment = get_latest_env(config, ml_client)
+    return f"{env.name}:{env.version}"
 
 
 def run_job(name: str, config: Config, ml_client: MLClient) -> Job:
