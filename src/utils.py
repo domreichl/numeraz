@@ -18,7 +18,7 @@ def get_ml_client(config: Config) -> MLClient:
 def get_latest_env(config: Config, ml_client: MLClient) -> Environment:
     return max(
         ml_client.environments.list(config.environment_name),
-        key=lambda env: env.version,
+        key=lambda env: int(env.version),
     )
 
 
