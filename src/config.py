@@ -13,6 +13,9 @@ class Config:
         self.numerai_data_version = "v5.0"
         self.data_asset_name = "numerai"
         self.data_asset_version = dt.datetime.now().strftime("%Y-%m")
+        self.data_asset_uri = (
+            f"azureml:{self.data_asset_name}:{self.data_asset_version}"
+        )
         with open("resources.json") as file:
             resources = json.load(file)
         self.subscription_id = resources["subscription_id"]
