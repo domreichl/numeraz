@@ -43,23 +43,22 @@ class DataPreprocessor:
         n_test_eras: int = 150,
         eras_to_embargo: int = 4,
     ) -> tuple:
-        eras = list(df["era"].unique())
-        test_eras = [
-            str(era) for era in range(start_test_era, start_test_era + n_test_eras)
-        ]
-        train_eras = [
-            era
-            for era in eras
-            if era
-            not in range(
-                start_test_era - eras_to_embargo,
-                start_test_era + n_test_eras + eras_to_embargo,
+        eras = set(df["era"].unique().astype(int).tolist())
+        test_eras = eras.intersection(
+            set(range(start_test_era, start_test_era + n_test_eras))
+        )
+        train_eras = eras.difference(
+            set(
+                range(
+                    start_test_era - eras_to_embargo,
+                    start_test_era + n_test_eras + eras_to_embargo,
+                )
             )
-        ]
-        train = df[df["era"].isin(train_eras)]
-        test = df[df["era"].isin(test_eras)]
+        )
+        train = df[df["era"].astype(int).isin(train_eras)]
+        test = df[df["era"].astype(int).isin(test_eras)]
         print(
-            f"Split data into {train['era'].nunique()} train and {train['era'].nunique()} test eras"
+            f"Split data ({len(eras)} eras) into {train['era'].nunique()} train and {test['era'].nunique()} test eras"
         )
 
         return train, test
