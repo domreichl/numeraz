@@ -29,7 +29,6 @@ class Components:
         args = f"\
             --data_asset_name {self.config.data_asset_name} \
             --data_asset_version {self.config.data_asset_version} \
-            --experiment_name {self.config.experiment_name} \
             --subscription_id {self.config.subscription_id} \
             --resource_group {self.config.resource_group} \
             --workspace_name {self.config.workspace_name} \
@@ -42,18 +41,18 @@ class Components:
 
     def _preprocess_data(self, name: str) -> Command:
         args = f" \
-            --data_asset_name {self.config.data_asset_name} \
-            --data_asset_version {self.config.data_asset_version} \
             --feature_set {self.config.feature_set} \
-            --experiment_name {self.config.experiment_name} \
-            --subscription_id {self.config.subscription_id} \
-            --resource_group {self.config.resource_group} \
-            --workspace_name {self.config.workspace_name} \
+            --data_uri ${{inputs.data_uri}} \
             --train_data ${{outputs.train_data}} \
             --test_data ${{outputs.test_data}}"
         return command(
             display_name=name,
             command=self.command.format(name=name, args=args),
+            inputs={
+                "data_uri": Input(
+                    path=self.config.data_asset_uri, mode="direct", type="uri_folder"
+                )
+            },
             outputs={
                 "train_data": Output(type="uri_file"),
                 "test_data": Output(type="uri_file"),

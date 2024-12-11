@@ -6,7 +6,6 @@ from numerapi import NumerAPI
 from components import parse_args
 
 
-DATA_DIR = "./data"
 args: dict = parse_args(
     [
         "data_asset_name",
@@ -14,7 +13,6 @@ args: dict = parse_args(
         "subscription_id",
         "resource_group",
         "workspace_name",
-        "experiment_name",
         "numerai_data_version",
     ]
 )
@@ -34,6 +32,7 @@ try:
         f"Data asset '{args['data_asset_name']}' with version '{args['data_asset_version']}' already exists"
     )
 except:
+    data_dir = "./data"
     for fn in [
         "features.json",
         "live.parquet",
@@ -43,14 +42,14 @@ except:
     ]:
         numerapi.download_dataset(
             filename=f"{args['numerai_data_version']}/{fn}",
-            dest_path=f"{DATA_DIR}/{fn}",
+            dest_path=f"{data_dir}/{fn}",
         )
     data_asset = ml_client.data.create_or_update(
         Data(
             name=args["data_asset_name"],
             version=args["data_asset_version"],
             description=f"Numerai {args['numerai_data_version']} Data",
-            path=DATA_DIR,
+            path=data_dir,
             type="uri_folder",
         )
     )
