@@ -17,7 +17,12 @@ df = dp.load_full_data(features, targets)
 train_df, test_df = dp.split_train_test(df)
 
 with mlflow.start_run():
-    mlflow.set_tag("feature_set", args["feature_set"])
+    mlflow.set_tags(
+        {
+            "data_uri": args["data_uri"],
+            "feature_set": args["feature_set"],
+        },
+    )
     mlflow.log_params(
         {
             "train_eras": dp.get_era_range(train_df),
