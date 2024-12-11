@@ -48,11 +48,7 @@ class Components:
         return command(
             display_name=name,
             command=self.command.format(name=name, args=args),
-            inputs={
-                "data_uri": Input(
-                    path=self.config.data_asset_uri, mode="direct", type="uri_folder"
-                )
-            },
+            inputs={"data_uri": Input(path=self.config.data_asset_uri, mode="direct")},
             outputs={
                 "train_data": Output(type="uri_file"),
                 "test_data": Output(type="uri_file"),
