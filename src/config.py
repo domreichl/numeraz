@@ -9,6 +9,14 @@ class Config:
     # PARAMS
     experiment_name = "initial"
     feature_set = "medium"
+    hparams = {
+        "n_estimators": 15000,
+        "max_depth": 5,
+        "num_leaves": 21,
+        "learning_rate": 0.01,
+        "colsample_bytree": 0.1,
+        "min_child_samples": 200,
+    }
 
     # DATA
     main_target = "target_cyrusd_20"
