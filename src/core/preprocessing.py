@@ -3,8 +3,9 @@ import pandas as pd
 
 
 class DataPreprocessor:
-    def __init__(self, data_dir: str):
+    def __init__(self, data_dir: str = None):
         self.data_dir = data_dir
+        self.eras_to_embargo = 4
 
     def get_era_range(self, df: pd.DataFrame) -> str:
         era_range = f"{str(df['era'].min()).zfill(4)}-{str(df['era'].max()).zfill(4)}"
@@ -36,12 +37,15 @@ class DataPreprocessor:
 
         return df
 
+    def load_x_y_splits(self, df) -> tuple:
+        train, val = self.split_train_val(df)
+        x_train, y_train = self.split_x_y(train)
+        x_val, y_val = self.split_x_y(val)
+
+        return (x_train, y_train), (x_val, y_val)
+
     def split_train_test(
-        self,
-        df: pd.DataFrame,
-        start_test_era: int = 501,
-        n_test_eras: int = 150,
-        eras_to_embargo: int = 4,
+        self, df: pd.DataFrame, start_test_era: int = 501, n_test_eras: int = 150
     ) -> tuple:
         eras = set(df["era"].unique().astype(int).tolist())
         test_eras = eras.intersection(
@@ -50,8 +54,8 @@ class DataPreprocessor:
         train_eras = eras.difference(
             set(
                 range(
-                    start_test_era - eras_to_embargo,
-                    start_test_era + n_test_eras + eras_to_embargo,
+                    start_test_era - self.eras_to_embargo,
+                    start_test_era + n_test_eras + self.eras_to_embargo,
                 )
             )
         )
@@ -63,10 +67,17 @@ class DataPreprocessor:
 
         return train, test
 
+    def split_train_val(self, df: pd.DataFrame, train_size: float = 0.85) -> tuple:
+        eras = list(df["era"].unique())
+        split = int(len(eras) * train_size)
+        train = df[df["era"].isin(eras[:split])]
+        test = df[df["era"].isin(eras[split + self.eras_to_embargo :])]
+        return train, test
+
     def split_x_y(self, df: pd.DataFrame, x_with_era=False) -> tuple:
         df = df.reset_index()
         if x_with_era:
-            x = df["era"] + [[col for col in df.columns if col.startswith("feature")]]
+            x = df[["era"] + [col for col in df.columns if col.startswith("feature")]]
         else:
             x = df[[col for col in df.columns if col.startswith("feature")]]
         y = df[
