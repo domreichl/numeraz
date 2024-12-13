@@ -1,6 +1,6 @@
+import datetime as dt
 import json
 from dataclasses import dataclass
-import datetime as dt
 from pathlib import Path
 
 
@@ -8,9 +8,9 @@ from pathlib import Path
 class Config:
     # PARAMS
     experiment_name = "initial"
-    feature_set = "medium"
+    feature_set = "small"  # "medium"
     hparams = {
-        "n_estimators": 15000,
+        "n_estimators": 10000,  # 15000,
         "max_depth": 5,
         "num_leaves": 21,
         "learning_rate": 0.01,
