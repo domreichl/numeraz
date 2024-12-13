@@ -31,6 +31,7 @@ class Components:
         args = f"--feature_set {self.config.feature_set}"
         args += " --data_uri ${{inputs.data_uri}} --train_data ${{outputs.train_data}} --test_data ${{outputs.test_data}}"
         return CommandComponent(
+            name=name,
             display_name=name,
             command=self.command.format(name=name, args=args),
             inputs={"data_uri": Input(path=self.config.data_asset_uri, mode="direct")},
