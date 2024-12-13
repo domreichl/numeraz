@@ -18,7 +18,7 @@ class Pipelines:
 
         @dsl.pipeline(
             name="model_training",
-            description="train, evaluate, and register base models, ensembles, and a prod model",
+            description="trains base models, evaluates ensembles, and registers a prod model",
             compute=self.config.compute_instance,
             experiment_name=self.config.experiment_name,
             force_rerun=force_rerun,
