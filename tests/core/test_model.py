@@ -40,7 +40,7 @@ def test_fit_predict_evaluate(mock_data: tuple):
 
     (x_train, y_train), (x_val, y_val) = mock_data
     model = Model("test-model", "target_20", {"n_estimators": 1})
-    model.fit(x_train, y_train)
+    model.fit(x_train, y_train, "target_20")
     predictions = model.predict(x_val)
 
     assert len(predictions) == 6

@@ -11,8 +11,8 @@ class Model:
         self.main_target = main_target
         self.model = LGBMRegressor(**hparams, force_row_wise=True, verbose=-1)
 
-    def fit(self, x_train: pd.DataFrame, y_train: pd.DataFrame):
-        self.model.fit(x_train, y_train[self.main_target])
+    def fit(self, x_train: pd.DataFrame, y_train: pd.DataFrame, target: str):
+        self.model.fit(x_train, y_train[target])
 
     def predict(self, x_test: pd.DataFrame) -> np.ndarray:
         return self.model.predict(x_test)
@@ -23,3 +23,6 @@ class Model:
         )
 
         return metrics
+
+    def save(self, models_dir: str):
+        self.model.booster_.save_model(f"{models_dir}/{self.name}.txt")
