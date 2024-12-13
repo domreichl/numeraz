@@ -1,6 +1,8 @@
+import json
 from argparse import ArgumentParser, Namespace
-from azure.ai.ml import command, Input, Output
-from azure.ai.ml.entities import Command
+
+from azure.ai.ml import Input, Output
+from azure.ai.ml.entities import CommandComponent
 
 
 def parse_args(args: list) -> dict:
@@ -22,36 +24,34 @@ class Components:
         )
         self.command = "PYTHONPATH=.. python -m components.{name} {args}"
 
-    def get_component(self, name: str) -> Command:
+    def get_component(self, name: str) -> CommandComponent:
         return getattr(self, f"_{name}")(name)
 
-    def _create_data_asset(self, name: str) -> Command:
-        args = f"\
-            --data_asset_name {self.config.data_asset_name} \
-            --data_asset_version {self.config.data_asset_version} \
-            --subscription_id {self.config.subscription_id} \
-            --resource_group {self.config.resource_group} \
-            --workspace_name {self.config.workspace_name} \
-            --numerai_data_version {self.config.numerai_data_version}"
-        return command(
-            display_name=name,
-            command=self.command.format(name=name, args=args),
-            **self.arguments,
-        )
-
-    def _preprocess_data(self, name: str) -> Command:
-        args = f" \
-            --feature_set {self.config.feature_set} \
-            --data_uri ${{inputs.data_uri}} \
-            --train_data ${{outputs.train_data}} \
-            --test_data ${{outputs.test_data}}"
-        return command(
+    def _preprocess_data(self, name: str) -> CommandComponent:
+        args = f"--feature_set {self.config.feature_set}"
+        args += " --data_uri ${{inputs.data_uri}} --train_data ${{outputs.train_data}} --test_data ${{outputs.test_data}}"
+        return CommandComponent(
             display_name=name,
             command=self.command.format(name=name, args=args),
             inputs={"data_uri": Input(path=self.config.data_asset_uri, mode="direct")},
             outputs={
                 "train_data": Output(type="uri_file"),
                 "test_data": Output(type="uri_file"),
+            },
+            **self.arguments,
+        )
+
+    def _train_base_models(self, name: str) -> CommandComponent:
+        args = f"--main_target {self.config.main_target} --hparams '{json.dumps(self.config.hparams)}'"
+        args += " --train_data ${{inputs.train_data}} --base_models_dir ${{outputs.base_models_dir}} --val_predictions ${{outputs.val_predictions}}"
+        return CommandComponent(
+            name=name,
+            display_name=name,
+            command=self.command.format(name=name, args=args),
+            inputs={"train_data": Input(type="uri_file")},
+            outputs={
+                "base_models_dir": Output(type="uri_folder"),
+                "val_predictions": Output(type="uri_file"),
             },
             **self.arguments,
         )

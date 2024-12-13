@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from lightgbm import LGBMRegressor
 
-from src.core.evaluation import evaluate_predictions
+from core.evaluation import evaluate_predictions
 
 
 class Model:

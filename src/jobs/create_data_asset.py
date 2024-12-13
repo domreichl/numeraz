@@ -5,7 +5,6 @@ from numerapi import NumerAPI
 
 from components import parse_args
 
-
 args: dict = parse_args(
     [
         "data_asset_name",

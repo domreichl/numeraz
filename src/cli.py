@@ -20,8 +20,7 @@ def job(name: str):
 @cli.command()
 @click.argument("name")
 def component(name: str):
-    job = api.run_job(name)
-    api.register_component(job)
+    api.register_component(name)
 
 
 @cli.command()

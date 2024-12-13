@@ -1,10 +1,20 @@
 import webbrowser
+
 from azure.ai.ml import MLClient
-from azure.ai.ml.entities import Command, Component, Data, Environment, Job, Pipeline
+from azure.ai.ml.entities import (
+    Command,
+    CommandComponent,
+    Component,
+    Data,
+    Environment,
+    Job,
+    Pipeline,
+)
 from azure.identity import DefaultAzureCredential
 
 from components import Components
 from config import Config
+from jobs import Jobs
 from pipelines import Pipelines
 
 
@@ -19,14 +29,14 @@ class NumerazAPI:
         )
         self.config.latest_env_name = self._get_latest_env()
 
-    def register_component(self, job: Job) -> Component:
+    def register_component(self, name: str):
         try:
-            prev_component: Component = self.ml_client.components.get(job.display_name)
+            prev_component: Component = self.ml_client.components.get(name)
             version = str(int(prev_component.version) + 1)
         except:
             version = "1"
-        component: Component = job.component
-        component.name = job.display_name
+        components = Components(self.config)
+        component: CommandComponent = components.get_component(name)
         component.version = version
         component = self.ml_client.components.create_or_update(component, force=True)
         print(
@@ -36,8 +46,8 @@ class NumerazAPI:
         return component
 
     def run_job(self, name: str) -> Job:
-        components = Components(self.config)
-        command: Command = components.get_component(name)
+        jobs = Jobs(self.config)
+        command: Command = jobs.get_job(name)
         job: Job = self.ml_client.jobs.create_or_update(command)
         print(f"Started job '{job.display_name}' with name '{job.name}'")
 
