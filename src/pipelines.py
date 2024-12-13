@@ -1,5 +1,5 @@
 from azure.ai.ml import MLClient, dsl
-from azure.ai.ml.entities import Pipeline
+from azure.ai.ml.entities import PipelineJob
 
 from config import Config
 
@@ -9,10 +9,10 @@ class Pipelines:
         self.config = config
         self.ml_client = ml_client
 
-    def get_pipeline(self, name: str) -> Pipeline:
-        return getattr(self, f"_{name}")()
+    def get_pipeline(self, name: str, force_rerun: bool) -> PipelineJob:
+        return getattr(self, f"_{name}")(force_rerun)
 
-    def _model_training(self) -> Pipeline:
+    def _model_training(self, force_rerun: bool) -> PipelineJob:
         preprocess_data = self.ml_client.components.get("preprocess_data")
         base_models = self.ml_client.components.get("train_base_models")
 
@@ -21,8 +21,9 @@ class Pipelines:
             description="trains base models, builds and ensemble, and registers a prod model",
             compute=self.config.compute_instance,
             experiment_name=self.config.experiment_name,
+            force_rerun=force_rerun,
         )
-        def _pipeline() -> Pipeline:
+        def _pipeline():
             preprocessing = preprocess_data(data_uri=self.config.data_asset_uri)
             base_training = base_models(train_data=preprocessing.outputs.train_data)
 

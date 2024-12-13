@@ -8,7 +8,7 @@ from azure.ai.ml.entities import (
     Data,
     Environment,
     Job,
-    Pipeline,
+    PipelineJob,
 )
 from azure.identity import DefaultAzureCredential
 
@@ -53,10 +53,10 @@ class NumerazAPI:
 
         return job
 
-    def run_pipeline(self, name: str):
+    def run_pipeline(self, name: str, force_rerun: bool):
         pipelines = Pipelines(self.config, self.ml_client)
-        pipeline: Pipeline = pipelines.get_pipeline(name)
-        job: Job = self.ml_client.jobs.create_or_update(pipeline)
+        pipeline_job: PipelineJob = pipelines.get_pipeline(name, force_rerun)
+        job: Job = self.ml_client.jobs.create_or_update(pipeline_job)
         webbrowser.open(job.services["Studio"].endpoint)
         self.ml_client.jobs.stream(job.name)
 
