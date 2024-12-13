@@ -1,4 +1,4 @@
-from azure.ai.ml import dsl, MLClient
+from azure.ai.ml import MLClient, dsl
 from azure.ai.ml.entities import Pipeline
 
 from config import Config
@@ -14,19 +14,23 @@ class Pipelines:
 
     def _model_training(self) -> Pipeline:
         preprocess_data = self.ml_client.components.get("preprocess_data")
+        base_models = self.ml_client.components.get("train_base_models")
 
         @dsl.pipeline(
             name="model_training",
-            description="creates a prod model",
+            description="trains base models, builds and ensemble, and registers a prod model",
             compute=self.config.compute_instance,
             experiment_name=self.config.experiment_name,
         )
         def _pipeline() -> Pipeline:
             preprocessing = preprocess_data(data_uri=self.config.data_asset_uri)
+            base_training = base_models(train_data=preprocessing.outputs.train_data)
 
             return {
                 "train_data": preprocessing.outputs.train_data,
                 "test_data": preprocessing.outputs.test_data,
+                "base_models_dir": base_training.outputs.base_models_dir,
+                "val_predictions": base_training.outputs.val_predictions,
             }
 
         return _pipeline()
