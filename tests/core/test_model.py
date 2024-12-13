@@ -23,7 +23,14 @@ def mock_data() -> tuple:
         }
     )
     x_val = x_train.copy()
-    y_val = y_train.copy()
+    y_val = pd.DataFrame(
+        {
+            "id": [str(i) for i in range(6)],
+            "era": ["503", "503", "503", "504", "504", "504"],
+            "target_20": [1, 1, 2, 2, 2, 3],
+            "numerai_meta_model": [3, 3, 4, 1, 1, 5],
+        }
+    )
 
     return (x_train, y_train), (x_val, y_val)
 
@@ -32,17 +39,15 @@ def test_fit_predict_evaluate(mock_data: tuple):
     warnings.filterwarnings("ignore")
 
     (x_train, y_train), (x_val, y_val) = mock_data
-    model = Model("test-model", "target_20", {})
+    model = Model("test-model", "target_20", {"n_estimators": 1})
     model.fit(x_train, y_train)
     predictions = model.predict(x_val)
 
     assert len(predictions) == 6
 
-    predictions = np.array([4, 1, 3, 5, 8, 2])
+    predictions = np.array([1, 2, 2, 1, 2, 2])
     metrics = model.evaluate(predictions, y_val)
 
-    for name, value in metrics.items():
-        if "mmc_sharpe" in name:
-            continue
+    for value in metrics.values():
         assert isinstance(value, float)
         assert value >= 0
