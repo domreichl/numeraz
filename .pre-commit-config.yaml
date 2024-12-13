@@ -15,7 +15,7 @@ repos:
     rev: 5.13.2
     hooks:
       - id: isort
-        name: "Python: sort imports"
+        name: "python: sort imports"
         args:
           - "--profile=black"
           - "-o=numpy,pandas"
