@@ -9,5 +9,5 @@
 ## API Usage
 - Run a job: `naz job <job_name>`
 - Register a component: `naz component <component_name>`
-- Run a pipeline job: `naz pipeline <pipeline_name> [--force-rerun]`
+- Run a pipeline job: `naz pipeline <pipeline_name> [--force-rerun] [--stream-job]`
 - Update the virtual environment: `naz update conda`

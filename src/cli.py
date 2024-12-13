@@ -26,8 +26,9 @@ def component(name: str):
 @cli.command()
 @click.argument("name")
 @click.option("--force-rerun", is_flag=True, default=False)
-def pipeline(name: str, force_rerun: bool):
-    api.run_pipeline(name, force_rerun)
+@click.option("--stream-job", is_flag=True, default=False)
+def pipeline(name: str, force_rerun: bool, stream_job: bool):
+    api.run_pipeline(name, force_rerun, stream_job)
 
 
 @cli.command()

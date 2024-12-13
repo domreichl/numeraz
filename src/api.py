@@ -53,12 +53,13 @@ class NumerazAPI:
 
         return job
 
-    def run_pipeline(self, name: str, force_rerun: bool):
+    def run_pipeline(self, name: str, force_rerun: bool, stream_job: bool):
         pipelines = Pipelines(self.config, self.ml_client)
         pipeline_job: PipelineJob = pipelines.get_pipeline(name, force_rerun)
         job: Job = self.ml_client.jobs.create_or_update(pipeline_job)
         webbrowser.open(job.services["Studio"].endpoint)
-        self.ml_client.jobs.stream(job.name)
+        if stream_job:
+            self.ml_client.jobs.stream(job.name)
 
     def update_conda(self):
         env: Environment = self._get_latest_env()

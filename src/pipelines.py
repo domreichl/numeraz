@@ -9,7 +9,7 @@ class Pipelines:
         self.config = config
         self.ml_client = ml_client
 
-    def get_pipeline(self, name: str, force_rerun: bool) -> PipelineJob:
+    def get_pipeline(self, name: str, force_rerun: bool = False) -> PipelineJob:
         return getattr(self, f"_{name}")(force_rerun)
 
     def _model_training(self, force_rerun: bool) -> PipelineJob:
