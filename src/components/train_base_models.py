@@ -32,7 +32,7 @@ with mlflow.start_run():
         with mlflow.start_run(run_name=target, nested=True):
             mlflow.set_tag("target", col)
             mlflow.log_metrics(metrics)
-            mlflow.lightgbm.log_model(model, model_name)
+            mlflow.lightgbm.log_model(model, model_name, input_example=x_val.iloc[:2])
             model.save(models_dir)
         y_val[f"pred_{target}"] = predictions
         corrs[model_name] = metrics["corr_mean"]
