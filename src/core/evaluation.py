@@ -41,7 +41,5 @@ def evaluate_predictions(y: pd.DataFrame, target: str) -> dict:
         except:
             metrics["mmc_sharpe"] = 0
     except:
-        warnings.warn(
-            f"Failed to compute mmc scores (numerai_meta_model median = {y['numerai_meta_model'].median()})"
-        )
+        warnings.warn(f"Failed to compute mmc scores")
     return {k: round(float(v), 5) for k, v in metrics.items()}
