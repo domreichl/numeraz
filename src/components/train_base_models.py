@@ -31,7 +31,7 @@ with mlflow.start_run():
         metrics = model.evaluate(predictions, y_val)
         with mlflow.start_run(run_name=target, nested=True):
             mlflow.set_tag("target", col)
-            mlflow.log_metrics(**metrics)
+            mlflow.log_metrics(metrics)
             mlflow.lightgbm.log_model(model, model_name)
             model.save(models_dir)
         y_val[f"pred_{target}"] = predictions
