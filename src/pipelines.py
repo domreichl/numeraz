@@ -31,7 +31,6 @@ class Pipelines:
                 "train_data": preprocessing.outputs.train_data,
                 "test_data": preprocessing.outputs.test_data,
                 "base_models_dir": base_training.outputs.base_models_dir,
-                "val_predictions": base_training.outputs.val_predictions,
             }
 
         return _pipeline()

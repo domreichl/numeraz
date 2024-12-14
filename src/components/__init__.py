@@ -44,15 +44,24 @@ class Components:
 
     def _train_base_models(self, name: str) -> CommandComponent:
         args = f"--main_target {self.config.main_target} --hparams '{json.dumps(self.config.hparams)}'"
-        args += " --train_data ${{inputs.train_data}} --base_models_dir ${{outputs.base_models_dir}} --val_predictions ${{outputs.val_predictions}}"
+        args += " --train_data ${{inputs.train_data}} --base_models_dir ${{outputs.base_models_dir}}"
         return CommandComponent(
             name=name,
             display_name=name,
             command=self.command.format(name=name, args=args),
             inputs={"train_data": Input(type="uri_file")},
-            outputs={
-                "base_models_dir": Output(type="uri_folder"),
-                "val_predictions": Output(type="uri_file"),
-            },
+            outputs={"base_models_dir": Output(type="uri_folder")},
+            **self.arguments,
+        )
+
+    def _evaluate_ensembles(self, name: str) -> CommandComponent:
+        args = f"--main_target {self.config.main_target}"
+        args += " --base_models_dir ${{inputs.base_models_dir}} --best_ensemble ${{outputs.best_ensemble}}"
+        return CommandComponent(
+            name=name,
+            display_name=name,
+            command=self.command.format(name=name, args=args),
+            inputs={"base_models_dir": Input(type="uri_folder")},
+            outputs={"best_ensemble": Output(type="uri_file")},
             **self.arguments,
         )
