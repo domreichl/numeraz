@@ -43,3 +43,26 @@ def evaluate_predictions(y: pd.DataFrame, target: str) -> dict:
     except:
         warnings.warn(f"Failed to compute mmc scores")
     return {k: round(float(v), 5) for k, v in metrics.items()}
+
+
+def evaluate_ensembles(
+    ensembles: dict[str, list[str]], predictions: pd.DataFrame, main_target: str
+) -> tuple[str, dict]:
+    top_ensemble = None
+    top_metrics = {"corr_sharpe": 0}
+    predictions = predictions[
+        ["era", main_target]
+        + [col for col in predictions.columns if col.startswith("pred_")]
+    ]
+    for name, te in ensembles.items():
+        pred_cols = [col for col in predictions.columns if col in te]
+        ensemble = predictions.groupby("era")[pred_cols].rank(pct=True).mean(axis=1)
+        metrics = evaluate_predictions(
+            predictions.assign(prediction=ensemble), main_target
+        )
+        print(f"Metrics for ensemble {name}: {metrics}")
+        if metrics["corr_sharpe"] > top_metrics["corr_sharpe"]:
+            top_metrics = metrics
+            top_ensemble = name
+
+    return top_ensemble, top_metrics
