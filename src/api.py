@@ -53,9 +53,13 @@ class NumerazAPI:
 
         return job
 
-    def run_pipeline(self, name: str, force_rerun: bool, stream_job: bool):
+    def run_pipeline(
+        self, name: str, force_rerun: bool, reuse_inputs: bool, stream_job: bool
+    ):
         pipelines = Pipelines(self.config, self.ml_client)
-        pipeline_job: PipelineJob = pipelines.get_pipeline(name, force_rerun)
+        pipeline_job: PipelineJob = pipelines.get_pipeline(
+            name, force_rerun, reuse_inputs
+        )
         job: Job = self.ml_client.jobs.create_or_update(pipeline_job)
         webbrowser.open(job.services["Studio"].endpoint)
         if stream_job:

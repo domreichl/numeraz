@@ -9,27 +9,34 @@ class Pipelines:
         self.config = config
         self.ml_client = ml_client
 
-    def get_pipeline(self, name: str, force_rerun: bool = False) -> PipelineJob:
-        return getattr(self, f"_{name}")(force_rerun)
+    def get_pipeline(
+        self, name: str, force_rerun: bool = False, reuse_inputs: bool = False
+    ) -> PipelineJob:
+        return getattr(self, f"_{name}")(force_rerun, reuse_inputs)
 
-    def _model_training(self, force_rerun: bool) -> PipelineJob:
+    def _model_training(self, force_rerun: bool, reuse_inputs: bool) -> PipelineJob:
         settings = dict(
+            name="model_training",
             description="trains base models, evaluates ensembles, and registers a prod model",
             compute=self.config.compute_instance,
             experiment_name=self.config.experiment_name,
+            force_rerun=force_rerun,
+            tags={"force_rerun": str(force_rerun), "reuse_inputs": str(reuse_inputs)},
         )
         preprocess_data = self.ml_client.components.get("preprocess_data")
         base_models = self.ml_client.components.get("train_base_models")
         ensembles = self.ml_client.components.get("evaluate_ensembles")
 
-        if force_rerun:
+        if reuse_inputs:
 
-            @dsl.pipeline(name="model_training", force_rerun=True, **settings)
+            @dsl.pipeline(**settings)
             def _pipeline():
                 preprocessing = preprocess_data(data_uri=self.config.data_asset_uri)
-                base_training = base_models(train_data=preprocessing.outputs.train_data)
+                base_training = base_models(
+                    train_data=self.config.component_inputs["train_data"]
+                )
                 ensembling = ensembles(
-                    base_models_dir=base_training.outputs.base_models_dir
+                    base_models_dir=self.config.component_inputs["base_models_dir"]
                 )
                 return {
                     "train_data": preprocessing.outputs.train_data,
@@ -40,14 +47,12 @@ class Pipelines:
 
         else:
 
-            @dsl.pipeline(name="model_training_reusing_inputs", **settings)
+            @dsl.pipeline(**settings)
             def _pipeline():
                 preprocessing = preprocess_data(data_uri=self.config.data_asset_uri)
-                base_training = base_models(
-                    train_data=self.config.component_inputs["train_data"]
-                )
+                base_training = base_models(train_data=preprocessing.outputs.train_data)
                 ensembling = ensembles(
-                    base_models_dir=self.config.component_inputs["base_models_dir"]
+                    base_models_dir=base_training.outputs.base_models_dir
                 )
                 return {
                     "train_data": preprocessing.outputs.train_data,
