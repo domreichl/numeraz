@@ -5,7 +5,7 @@ import mlflow
 import pandas as pd
 
 from components import parse_args
-from core.evaluation import evaluate_ensembles
+from core.evaluation import evaluate_ensembles, rank_models
 
 args: dict = parse_args(["main_target", "base_models_dir", "best_ensemble"])
 main_target = args["main_target"]
@@ -14,11 +14,8 @@ main_model = f"base_{main_target_name}"
 models_dir = args["base_models_dir"]
 predictions = pd.read_csv(os.path.join(models_dir, "predictions.csv"))
 with open(os.path.join(models_dir, "model_corrs.json"), "r") as f:
-    corrs = json.load(f)
-
-corrs_df = pd.DataFrame(corrs, index=[0]).transpose().reset_index()
-corrs_df.columns = ["model", "corr"]
-corrs_df.sort_values("corr", ascending=False, inplace=True)
+    corrs: dict = json.load(f)
+corrs_df: pd.DataFrame = rank_models(corrs)
 
 with mlflow.start_run():
     mlflow.set_tag("main_model", main_model)
