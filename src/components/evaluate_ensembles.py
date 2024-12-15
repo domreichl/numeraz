@@ -19,9 +19,9 @@ corrs_df: pd.DataFrame = rank_models(corrs)
 
 with mlflow.start_run():
     mlflow.set_tag("main_model", main_model)
-    mlflow.set_tag("top_model", corrs_df["model"][corrs_df["corr"].argmax()])
+    mlflow.set_tag("top_base_model", corrs_df["model"][corrs_df["corr"].argmax()])
     mlflow.log_metric("main_corr", corrs[main_model])
-    mlflow.log_metric("top_corr", corrs_df["corr"].max())
+    mlflow.log_metric("top_base_corr", corrs_df["corr"].max())
     ensembles = {
         "main": [f"pred_{main_target_name}"],
         "all": [col for col in predictions.columns if col.startswith("pred_")],
@@ -32,7 +32,8 @@ with mlflow.start_run():
     top_ensemble, top_metrics = evaluate_ensembles(ensembles, predictions, main_target)
     mlflow.set_tag("top_ensemble", top_ensemble)
     mlflow.set_tag("top_ensemble_models", ", ".join(ensembles[top_ensemble]))
-    mlflow.log_metrics(top_metrics)
+    mlflow.log_metric("top_ensemble_corr", top_metrics["corr_mean"])
+    mlflow.log_metric("top_ensemble_corr_sharpe", top_metrics["corr_sharpe"])
 
 with open(args["best_ensemble"], "w") as f:
     for model_name in ensembles[top_ensemble]:
