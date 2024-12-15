@@ -44,10 +44,10 @@ class Pipelines:
             def _pipeline():
                 preprocessing = preprocess_data(data_uri=self.config.data_asset_uri)
                 base_training = base_models(
-                    train_data=self.component_inputs["train_data"]
+                    train_data=self.config.component_inputs["train_data"]
                 )
                 ensembling = ensembles(
-                    base_models_dir=self.component_inputs["base_models_dir"]
+                    base_models_dir=self.config.component_inputs["base_models_dir"]
                 )
                 return {
                     "train_data": preprocessing.outputs.train_data,
