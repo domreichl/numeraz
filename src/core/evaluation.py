@@ -66,3 +66,11 @@ def evaluate_ensembles(
             top_ensemble = name
 
     return top_ensemble, top_metrics
+
+
+def rank_models(mean_corr_dict: dict) -> pd.DataFrame:
+    corrs_df = pd.DataFrame(mean_corr_dict, index=[0]).transpose().reset_index()
+    corrs_df.columns = ["model", "corr"]
+    corrs_df.sort_values("corr", ascending=False, inplace=True)
+
+    return corrs_df
