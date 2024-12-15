@@ -20,6 +20,7 @@ class Config:
     component_inputs = {
         "train_data": "azureml:azureml_994d2f8d-a4d6-410f-8bb1-e62d14dfc5d6_output_data_train_data:1",
         "base_models_dir": "azureml:azureml_cca8ff38-4ad2-46d0-8420-40016e50bec6_output_data_base_models_dir:1",
+        "best_ensemble": "azureml:azureml_106967a2-a7d5-476b-b08c-89a780e67987_output_data_best_ensemble:1",
     }
 
     # DATA
