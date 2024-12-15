@@ -17,6 +17,10 @@ class Config:
         "colsample_bytree": 0.1,
         "min_child_samples": 200,
     }
+    component_inputs = {
+        "train_data": "azureml:azureml_994d2f8d-a4d6-410f-8bb1-e62d14dfc5d6_output_data_train_data:1",
+        "base_models_dir": "azureml:azureml_cca8ff38-4ad2-46d0-8420-40016e50bec6_output_data_base_models_dir:1",
+    }
 
     # DATA
     main_target = "target_cyrusd_20"
