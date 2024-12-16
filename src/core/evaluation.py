@@ -1,5 +1,6 @@
 import warnings
 
+import numpy as np
 import pandas as pd
 from numerai_tools.scoring import correlation_contribution, numerai_corr
 
@@ -46,7 +47,10 @@ def evaluate_predictions(y: pd.DataFrame, target: str) -> dict:
 
 
 def evaluate_ensembles(
-    ensembles: dict[str, list[str]], predictions: pd.DataFrame, main_target: str
+    ensembles: dict[str, list[str]],
+    predictions: pd.DataFrame,
+    main_target: str,
+    ensembling_method: str,
 ) -> tuple[str, dict]:
     top_ensemble = None
     top_metrics = {"corr_sharpe": 0}
@@ -56,7 +60,24 @@ def evaluate_ensembles(
     ]
     for name, te in ensembles.items():
         pred_cols = [col for col in predictions.columns if col in te]
-        ensemble = predictions.groupby("era")[pred_cols].rank(pct=True).mean(axis=1)
+        if len(pred_cols) == 1 or ensembling_method == "simple":
+            ensemble = predictions.groupby("era")[pred_cols].rank(pct=True).mean(axis=1)
+        elif ensembling_method == "weighted":
+            corrmat = np.corrcoef(
+                predictions[pred_cols].values.T
+            )  # inter-model correlations
+            np.fill_diagonal(corrmat, 0.0)  # removes models' autocorrelations
+            weights = 1 / np.mean(
+                corrmat, axis=1
+            )  # calculates the weight proportional to each model's average correlation with other models
+            weights /= sum(weights)  # normalize so that sum equals 1
+            ensemble = predictions[pred_cols].dot(
+                weights
+            )  # computes weighted sum of predictions
+        else:
+            raise NotImplementedError(
+                f"Ensembling method {ensembling_method} is not implemented"
+            )
         metrics = evaluate_predictions(
             predictions.assign(prediction=ensemble), main_target
         )

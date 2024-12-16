@@ -58,7 +58,13 @@ def test_evaluate_ensembles(
         ensembles[f"top{n}"] = [m.replace("base_", "pred_") for m in top_n_models]
 
     top_ensemble, top_metrics = evaluation.evaluate_ensembles(
-        ensembles, predictions, main_target
+        ensembles, predictions, main_target, "simple"
+    )
+    assert top_ensemble == "all"
+    assert len(top_metrics) == 5
+
+    top_ensemble, top_metrics = evaluation.evaluate_ensembles(
+        ensembles, predictions, main_target, "weighted"
     )
     assert top_ensemble == "all"
     assert len(top_metrics) == 5
