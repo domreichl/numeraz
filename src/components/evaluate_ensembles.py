@@ -29,12 +29,25 @@ with mlflow.start_run():
     for n in range(1, 6):
         top_n_models = corrs_df["model"].iloc[:n].tolist()
         ensembles[f"top{n}"] = [m.replace("base_", "pred_") for m in top_n_models]
-    top_ensemble, top_metrics = evaluate_ensembles(ensembles, predictions, main_target)
+    top_ensembling_method = "simple"
+    top_ensemble, top_metrics = evaluate_ensembles(
+        ensembles, predictions, main_target, "simple"
+    )
+    top_ensemble_weighted, top_metrics_weighted = evaluate_ensembles(
+        ensembles, predictions, main_target, "weighted"
+    )
+    if top_metrics_weighted["corr_sharpe"] > top_metrics["corr_sharpe"]:
+        top_ensemble = top_ensemble_weighted
+        top_metrics = top_metrics_weighted
+        top_ensembling_method = "weighted"
     mlflow.set_tag("top_ensemble", top_ensemble)
     mlflow.set_tag("top_ensemble_models", ", ".join(ensembles[top_ensemble]))
+    mlflow.set_tag("top_ensembling_method", top_ensembling_method)
     mlflow.log_metric("top_ensemble_corr", top_metrics["corr_mean"])
     mlflow.log_metric("top_ensemble_corr_sharpe", top_metrics["corr_sharpe"])
 
-with open(args["best_ensemble"], "w") as f:
-    for model_name in ensembles[top_ensemble]:
-        f.write(model_name + "\n")
+with open(args["best_ensemble"], "w") as file:
+    json.dump(
+        {"ensembling_method": top_ensembling_method, "models": ensembles[top_ensemble]},
+        file,
+    )
