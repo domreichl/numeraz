@@ -65,3 +65,20 @@ class Components:
             outputs={"best_ensemble": Output(type="uri_file")},
             **self.arguments,
         )
+
+    def _build_prod_model(self, name: str) -> CommandComponent:
+        args = f"--main_target {self.config.main_target} --hparams '{json.dumps(self.config.hparams)}'"
+        args += " --train_data ${{inputs.train_data}} --test_data ${{inputs.test_data}}"
+        args += " --best_ensemble ${{inputs.best_ensemble}} --prod_model_dir ${{outputs.prod_model_dir}}"
+        return CommandComponent(
+            name=name,
+            display_name=name,
+            command=self.command.format(name=name, args=args),
+            inputs={
+                "train_data": Input(type="uri_file"),
+                "test_data": Input(type="uri_file"),
+                "best_ensemble": Input(type="uri_file"),
+            },
+            outputs={"prod_model_dir": Output(type="uri_folder")},
+            **self.arguments,
+        )
