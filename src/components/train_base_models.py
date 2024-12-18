@@ -35,7 +35,9 @@ with mlflow.start_run():
             metrics = model.evaluate(predictions, y_val)
             mlflow.set_tag("target", col)
             mlflow.log_metrics(metrics)
-            mlflow.lightgbm.log_model(model, model_name, input_example=x_val.iloc[:2])
+            mlflow.lightgbm.log_model(
+                model.model, model_name, input_example=x_val.iloc[:2]
+            )
             y_val[f"pred_{target}"] = predictions
             corrs[model_name] = metrics["corr_mean"]
 
