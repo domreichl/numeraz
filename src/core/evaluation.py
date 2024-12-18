@@ -17,7 +17,6 @@ def evaluate_predictions(y: pd.DataFrame, target: str) -> dict:
         .iloc[0]
     )
     metrics = {
-        "pred_std": y["prediction"].std(),
         "corr_mean": corr_mean,
         "corr_std": corr_std,
         "corr_sharpe": corr_mean / corr_std,

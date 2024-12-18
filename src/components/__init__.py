@@ -67,17 +67,22 @@ class Components:
         )
 
     def _build_prod_model(self, name: str) -> CommandComponent:
-        args = f"--main_target {self.config.main_target} --hparams '{json.dumps(self.config.hparams)}'"
-        args += " --train_data ${{inputs.train_data}} --test_data ${{inputs.test_data}}"
-        args += " --best_ensemble ${{inputs.best_ensemble}} --prod_model_dir ${{outputs.prod_model_dir}}"
+        args = f"--experiment_name {self.config.experiment_name} --model_name {self.config.model_name} --feature_set {self.config.feature_set}"
+        args += f" --main_target {self.config.main_target} --hparams '{json.dumps(self.config.hparams)}'"
+        args += " --data_uri ${{inputs.data_uri}} --train_data ${{inputs.train_data}} --test_data ${{inputs.test_data}}"
+        args += " --best_ensemble ${{inputs.best_ensemble}} --prod_model_info ${{inputs.prod_model_info}} --prod_model_dir ${{outputs.prod_model_dir}}"
         return CommandComponent(
             name=name,
             display_name=name,
             command=self.command.format(name=name, args=args),
             inputs={
+                "data_uri": Input(path=self.config.data_asset_uri, mode="direct"),
                 "train_data": Input(type="uri_file"),
                 "test_data": Input(type="uri_file"),
                 "best_ensemble": Input(type="uri_file"),
+                "prod_model_info": Input(
+                    path=self.config.prod_model_info, mode="direct"
+                ),
             },
             outputs={"prod_model_dir": Output(type="uri_folder")},
             **self.arguments,

@@ -16,7 +16,7 @@ class Jobs:
     def get_job(self, name: str) -> Command:
         return getattr(self, f"_{name}")(name)
 
-    def _create_data_asset(self, name: str) -> Command:
+    def _create_data_assets(self, name: str) -> Command:
         args = f"\
             --data_asset_name {self.config.data_asset_name} \
             --data_asset_version {self.config.data_asset_version} \

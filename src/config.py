@@ -7,6 +7,7 @@ from pathlib import Path
 @dataclass
 class Config:
     # PARAMS
+    model_name = "WISIGERNAZ"
     experiment_name = "initial"
     feature_set = "small"  # "medium"
     hparams = {
@@ -30,6 +31,7 @@ class Config:
     data_asset_name = "numerai"
     data_asset_version = dt.datetime.now().strftime("%Y-%m")
     data_asset_uri = f"azureml:{data_asset_name}:{data_asset_version}"
+    prod_model_info = "azureml:prod_model_info:0"
 
     # AZURE
     with open("resources.json") as file:
