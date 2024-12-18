@@ -26,6 +26,7 @@ class Pipelines:
         preprocess_data = self.ml_client.components.get("preprocess_data")
         base_models = self.ml_client.components.get("train_base_models")
         ensembles = self.ml_client.components.get("evaluate_ensembles")
+        prod_model = self.ml_client.components.get("build_prod_model")
 
         if reuse_inputs:
 
@@ -38,11 +39,17 @@ class Pipelines:
                 ensembling = ensembles(
                     base_models_dir=self.config.component_inputs["base_models_dir"]
                 )
+                prod_creation = prod_model(
+                    self.config.component_inputs["train_data"],
+                    self.config.component_inputs["test_data"],
+                    self.config.component_inputs["best_ensemble"],
+                )
                 return {
                     "train_data": preprocessing.outputs.train_data,
                     "test_data": preprocessing.outputs.test_data,
                     "base_models_dir": base_training.outputs.base_models_dir,
                     "best_ensemble": ensembling.outputs.best_ensemble,
+                    "prod_model_dir": prod_creation.outputs.prod_model_dir,
                 }
 
         else:
@@ -54,11 +61,17 @@ class Pipelines:
                 ensembling = ensembles(
                     base_models_dir=base_training.outputs.base_models_dir
                 )
+                prod_creation = prod_model(
+                    preprocessing.outputs.train_data,
+                    preprocessing.outputs.test_data,
+                    ensembling.outputs.best_ensemble,
+                )
                 return {
                     "train_data": preprocessing.outputs.train_data,
                     "test_data": preprocessing.outputs.test_data,
                     "base_models_dir": base_training.outputs.base_models_dir,
                     "best_ensemble": ensembling.outputs.best_ensemble,
+                    "prod_model_dir": prod_creation.outputs.prod_model_dir,
                 }
 
         return _pipeline()
