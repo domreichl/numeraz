@@ -61,10 +61,10 @@ def test_evaluate_ensembles(
         ensembles, predictions, main_target, "simple"
     )
     assert top_ensemble == "all"
-    assert len(top_metrics) == 5
+    assert len(top_metrics) == 4
 
     top_ensemble, top_metrics = evaluation.evaluate_ensembles(
         ensembles, predictions, main_target, "weighted"
     )
     assert top_ensemble == "all"
-    assert len(top_metrics) == 5
+    assert len(top_metrics) == 4

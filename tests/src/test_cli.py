@@ -1,6 +1,7 @@
+from unittest.mock import patch
+
 import pytest
 from click.testing import CliRunner
-from unittest.mock import patch
 
 from src.cli import cli
 
@@ -18,7 +19,13 @@ def runner():
 
 @pytest.fixture
 def components():
-    return ["create_data_asset", "preprocess_data"]
+    return [
+        "create_data_assets",
+        "preprocess_data",
+        "train_base_models",
+        "evaluate_ensembles",
+        "build_prod_model",
+    ]
 
 
 @pytest.fixture
