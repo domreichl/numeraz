@@ -6,6 +6,9 @@ import cloudpickle
 import mlflow
 import numpy as np
 import pandas as pd
+from azure.ai.ml import MLClient
+from azure.ai.ml.entities import Data
+from azure.identity import DefaultAzureCredential
 from azureml.fsspec import AzureMachineLearningFileSystem
 
 from components import parse_args
@@ -15,6 +18,9 @@ from core.preprocessing import DataPreprocessor
 
 args: dict = parse_args(
     [
+        "subscription_id",
+        "resource_group",
+        "workspace_name",
         "experiment_name",
         "model_name",
         "feature_set",
@@ -78,12 +84,19 @@ with mlflow.start_run() as run:
 
     # UPDATE PROD MODEL INFO
     file_name = "prod_model_info"
-    fs = AzureMachineLearningFileSystem(args[file_name])
+    file_path = os.path.join(models_dir, file_name + ".json")
+    ml_client = MLClient(
+        credential=DefaultAzureCredential(),
+        subscription_id=args["subscription_id"],
+        resource_group_name=args["resource_group"],
+        workspace_name=args["workspace_name"],
+    )
+    data_asset: Data = ml_client.data.get(name=file_name, label="latest")
+    fs = AzureMachineLearningFileSystem(data_asset.path)
     with fs.open(fs.glob(f"LocalUpload/*/{file_name}.json")[0]) as file:
         model_info: dict = json.load(file)
         model_info[model_name] = {
             "date": str(dt.datetime.today().date()),
-            "model_name": model_name,
             "experiment_name": args["experiment_name"],
             "run_name": run.info.run_name,
             "run_id": run.info.run_id,
@@ -97,9 +110,16 @@ with mlflow.start_run() as run:
             "ensembling_method": ensembling_method,
             "metrics": metrics,
         }
-
-    with open(os.path.join(models_dir, file_name + ".json"), "w") as file:
+    with open(file_path, "w") as file:
         json.dump(model_info, file)
+    updated_data_asset = Data(
+        name=file_name,
+        version=str(int(data_asset.version) + 1),
+        path=file_path,
+        type=data_asset.type,
+        tags=data_asset.tags,
+    )
+    ml_client.data.create_or_update(updated_data_asset)
 
     # CREATE PERFORMANCE PLOTS
     performance = pd.DataFrame(
