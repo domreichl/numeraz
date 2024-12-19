@@ -40,9 +40,11 @@ class Pipelines:
                     base_models_dir=self.config.component_inputs["base_models_dir"]
                 )
                 prod_creation = prod_model(
+                    data_uri=self.config.data_asset_uri,
                     train_data=self.config.component_inputs["train_data"],
                     test_data=self.config.component_inputs["test_data"],
                     best_ensemble=self.config.component_inputs["best_ensemble"],
+                    prod_model_info=self.config.prod_model_info,
                 )
                 return {
                     "train_data": preprocessing.outputs.train_data,
@@ -62,9 +64,11 @@ class Pipelines:
                     base_models_dir=base_training.outputs.base_models_dir
                 )
                 prod_creation = prod_model(
+                    data_uri=self.config.data_asset_uri,
                     train_data=preprocessing.outputs.train_data,
                     test_data=preprocessing.outputs.test_data,
                     best_ensemble=ensembling.outputs.best_ensemble,
+                    prod_model_info=self.config.prod_model_info,
                 )
                 return {
                     "train_data": preprocessing.outputs.train_data,
