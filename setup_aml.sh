@@ -28,7 +28,8 @@ echo "Creating a compute instance"
 az ml compute create -n "${PROJECT_DIR}-ci01" -t ComputeInstance --size ${COMPUTE_SIZE} -g "${PROJECT_DIR}-rg" -w "${PROJECT_DIR}-ws"
 
 echo "Creating a virtual environment"
-az ml environment create --name "${PROJECT_DIR}-env" --conda-file $CONDA_FILE -g "${PROJECT_DIR}-rg" -w "${PROJECT_DIR}-ws" --image $ENV_IMAGE
+envName="${PROJECT_DIR}-env"
+az ml environment create --name ${env_name} --conda-file $CONDA_FILE -g "${PROJECT_DIR}-rg" -w "${PROJECT_DIR}-ws" --image $ENV_IMAGE
 
 cat <<EOF > resources.json
 {
@@ -39,3 +40,8 @@ cat <<EOF > resources.json
   "environment_name": "${PROJECT_DIR}-env"
 }
 EOF
+
+
+echo "Creating service principal for role-based access control for GitHub Actions"
+servicePrincipalName="Azure-ARM-${envName}-${PROJECT_DIR}"
+az ad sp create-for-rbac --name $servicePrincipalName --role "Contributor" --scopes /subscriptions/$SUBSCRIPTION_ID --json-auth 
