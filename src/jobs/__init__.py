@@ -1,5 +1,8 @@
-from azure.ai.ml import command
-from azure.ai.ml.entities import Command
+import json
+
+from azure.ai.ml import Input, command
+from azure.ai.ml.entities import Command, Sweep
+from azure.ai.ml.sweep import QUniform
 
 
 class Jobs:
@@ -29,3 +32,30 @@ class Jobs:
             command=self.command.format(name=name, args=args),
             **self.arguments,
         )
+
+    def _tune_hparams(self, name: str) -> Sweep:
+        args = f"--main_target {self.config.main_target} --hparams '{json.dumps(self.config.hparams)}'"
+        args += " --train_data ${{inputs.train_data}} --n_estimators ${{inputs.n_estimators}}"
+        trial_command: Command = command(
+            command=self.command.format(name=name, args=args),
+            inputs={
+                "train_data": Input(
+                    path=self.config.component_inputs["train_data"], type="uri_file"
+                ),
+                "n_estimators": 1,
+            },
+            **self.arguments,
+        )
+        trial = trial_command(n_estimators=QUniform(1, 25000, 100))
+        sweep: Sweep = trial.sweep(
+            primary_metric="corr_sharpe",
+            goal="maximize",
+            sampling_algorithm="bayesian",
+            max_concurrent_trials=2,
+            max_total_trials=100,
+            timeout=60 * 60 * 4,
+        )
+        sweep.display_name = f"{name}__n_estimators"
+        sweep.experiment_name = f"{self.config.experiment_name}_sweep"
+
+        return sweep

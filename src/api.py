@@ -1,4 +1,5 @@
 import webbrowser
+from typing import Union
 
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import (
@@ -9,6 +10,7 @@ from azure.ai.ml.entities import (
     Environment,
     Job,
     PipelineJob,
+    Sweep,
 )
 from azure.identity import DefaultAzureCredential
 
@@ -47,7 +49,7 @@ class NumerazAPI:
 
     def run_job(self, name: str) -> Job:
         jobs = Jobs(self.config)
-        command: Command = jobs.get_job(name)
+        command: Union[Command, Sweep] = jobs.get_job(name)
         job: Job = self.ml_client.jobs.create_or_update(command)
         print(f"Started job '{job.display_name}' with name '{job.name}'")
 
