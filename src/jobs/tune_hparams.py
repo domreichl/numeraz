@@ -25,6 +25,8 @@ target = args["main_target"]
 with mlflow.start_run():
     mlflow.set_tag("target", target)
     mlflow.log_params(hparams)
+    mlflow.log_param("train_eras", dp.get_era_range(y_train))
+    mlflow.log_param("val_eras", dp.get_era_range(y_val))
 
     model = Model(name="tune", main_target=target, hparams=hparams)
     model.fit(x_train, y_train, target)
