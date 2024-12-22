@@ -11,7 +11,7 @@ jobs:
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
     - name: setup
-      run: bash setup_naz.shs
+      run: bash setup_naz.sh
     - name: start compute instance
       run: az ml compute start -n numeraz-ci01
     - name: run job
