@@ -8,7 +8,7 @@ on:
         default: gha-ci
         required: false
 jobs:
-  build:
+  setup-and-run-pipeline:
     runs-on: ubuntu-latest
     steps:
     - name: check out repo
@@ -34,6 +34,7 @@ jobs:
         az ml compute create -w numeraz-ws -g numeraz-rg \
         -n ${{ github.event.inputs.compute_instance_name }} \
         --size Standard_E4ds_v4 --type ComputeInstance
+      continue-on-error: true
     - name: start compute instance
       run: az ml compute start -n ${{ github.event.inputs.compute_instance_name }} -w numeraz-ws -g numeraz-rg
       continue-on-error: true
@@ -47,6 +48,6 @@ jobs:
         "environment_name": "${GITHUB_REPOSITORY#*/}-env"}
         EOF
     - name: run job
-      run: uv run naz pipeline model_training
+      run: uv run naz pipeline model_training --stream-job
     - name: stop compute instance
-      run: az ml compute start -n ${{ github.event.inputs.compute_instance_name }} -w numeraz-ws -g numeraz-rg
+      run: az ml compute stop -n ${{ github.event.inputs.compute_instance_name }} -w numeraz-ws -g numeraz-rg
