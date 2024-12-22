@@ -19,4 +19,4 @@ jobs:
     - name: run job
       run: naz pipeline model_training
     - name: stop compute instance
-      run: az ml compute stop -n numeraz-ci01
+      run: az ml compute start -n numeraz-ci01 -w numeraz-ws -g numeraz-rg
