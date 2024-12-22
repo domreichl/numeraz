@@ -20,7 +20,6 @@ jobs:
       run: source .venv/bin/activate
     - name: install dependencies
       run: uv pip install -r pyproject.toml
-      working-directory: .
     - name: install naz project
       run: uv pip install .
     - name: start compute instance
