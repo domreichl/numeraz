@@ -1,9 +1,26 @@
 name: pipeline-model-training
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      subscription_id:
+        required: true
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: write resources.json
+      run: |
+        cat <<EOF > resources.json \
+        { \
+        "subscription_id": "${{ github.event.inputs.subscription_id }}", \
+        "resource_group": "${GITHUB_REPOSITORY#*/}-rg", \
+        "workspace_name": "${GITHUB_REPOSITORY#*/}-ws", \
+        "compute_instance": "${GITHUB_REPOSITORY#*/}-ci01", \
+        "environment_name": "${GITHUB_REPOSITORY#*/}-env" \
+        } \
+        EOF
+    - name: resources
+      run: cat resources.json
     - name: check out repo
       uses: actions/checkout@v2
     - name: azure login
