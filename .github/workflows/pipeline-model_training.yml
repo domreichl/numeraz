@@ -29,6 +29,7 @@ jobs:
     - name: start compute instance
       run: az ml compute start -n numeraz-ci01 -w numeraz-ws -g numeraz-rg
     - name: write resources.json
+      if: always()
       run: |
         cat <<EOF > resources.json
         {"subscription_id": "${{ github.event.inputs.subscription_id }}",
