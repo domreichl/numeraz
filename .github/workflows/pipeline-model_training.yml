@@ -8,21 +8,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: print id
-      run: echo ${{secrets.AZURE_CREDENTIALS.subscriptionID}}
-    - name: write resources.json
-      run: |
-        cat <<EOF > resources.json
-        {"subscription_id": "${{ github.event.inputs.subscription_id }}",
-        "subscription_id2": "${{secrets.AZURE_CREDENTIALS.subscriptionID}}",
-        "resource_group": "${GITHUB_REPOSITORY#*/}-rg",
-        "workspace_name": "${GITHUB_REPOSITORY#*/}-ws",
-        "compute_instance": "${GITHUB_REPOSITORY#*/}-ci01",
-        "environment_name": "${GITHUB_REPOSITORY#*/}-env"}
-        EOF
-      working-directory: .
-    - name: resources
-      run: cat resources.json
     - name: check out repo
       uses: actions/checkout@v2
     - name: azure login
@@ -43,6 +28,15 @@ jobs:
       run: uv pip install .
     - name: start compute instance
       run: az ml compute start -n numeraz-ci01 -w numeraz-ws -g numeraz-rg
+    - name: write resources.json
+      run: |
+        cat <<EOF > resources.json
+        {"subscription_id": "${{ github.event.inputs.subscription_id }}",
+        "resource_group": "${GITHUB_REPOSITORY#*/}-rg",
+        "workspace_name": "${GITHUB_REPOSITORY#*/}-ws",
+        "compute_instance": "${GITHUB_REPOSITORY#*/}-ci01",
+        "environment_name": "${GITHUB_REPOSITORY#*/}-env"}
+        EOF
     - name: run job
       if: always()
       run: uv run naz pipeline model_training
