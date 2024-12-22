@@ -12,8 +12,16 @@ jobs:
         creds: ${{secrets.AZURE_CREDENTIALS}}
     - name: install az ml
       run: az extension add -n ml -y
-    - name: setup
-      run: bash setup_naz.sh
+    - name: install uv
+      run: curl -LsSf https://astral.sh/uv/install.sh | sh
+    - name: install venv
+      run: uv venv -p 3.11.10
+    - name: activate venv
+      run: source .venv/bin/activate
+    - name: install dependencies
+      run: uv pip install -r pyproject.toml
+    - name: install naz project
+      run: uv run pip install -e .
     - name: start compute instance
       run: az ml compute start -n numeraz-ci01 -w numeraz-ws -g numeraz-rg
     - name: run job
