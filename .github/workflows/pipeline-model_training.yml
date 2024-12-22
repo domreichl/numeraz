@@ -22,7 +22,10 @@ jobs:
       run: uv pip install -r pyproject.toml
     - name: install naz project
       run: uv pip install .
+    - name: start compute instance
+      run: az ml compute start -n numeraz-ci01 -w numeraz-ws -g numeraz-rg
     - name: run job
+      if: always()
       run: uv run naz pipeline model_training
     - name: stop compute instance
       run: az ml compute start -n numeraz-ci01 -w numeraz-ws -g numeraz-rg
