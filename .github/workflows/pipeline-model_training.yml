@@ -8,6 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: print id
+      run: echo ${{secrets.AZURE_CREDENTIALS.subscriptionID}}
     - name: write resources.json
       run: |
         cat <<EOF > resources.json \
