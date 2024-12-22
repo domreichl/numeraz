@@ -1,0 +1,20 @@
+name: pipeline-machine-learning
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: check out repo
+      uses: actions/checkout@v2
+    - name: azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: setup
+      run: bash setup_naz.shs
+    - name: start compute instance
+      run: az ml compute start -n numeraz-ci01
+    - name: run job
+      run: naz pipeline model_training
+    - name: stop compute instance
+      run: az ml compute stop -n numeraz-ci01
