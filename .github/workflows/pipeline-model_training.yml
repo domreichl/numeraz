@@ -10,6 +10,8 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: install az ml
+      run: az extension add -n ml -y
     - name: setup
       run: bash setup_naz.sh
     - name: start compute instance
