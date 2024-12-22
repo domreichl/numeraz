@@ -31,10 +31,9 @@ jobs:
       run: uv pip install .
     - name: create compute instance
       run: |
-        az ml compute create \
-        --name ${{ github.event.inputs.compute_instance_name }} \
-        --size Standard_NC6 --min-instances 0 --max-instances 5 \
-        --type AmlCompute -w numeraz-ws -g numeraz-rg
+        az ml compute create -w numeraz-ws -g numeraz-rg \
+        -n ${{ github.event.inputs.compute_instance_name }} \
+        --size Standard_E4ds_v4 --type ComputeInstance
     - name: start compute instance
       run: az ml compute start -n ${{ github.event.inputs.compute_instance_name }} -w numeraz-ws -g numeraz-rg
       continue-on-error: true
