@@ -21,7 +21,7 @@ jobs:
     - name: install dependencies
       run: uv pip install -r pyproject.toml
     - name: install naz project
-      run: uv run pip install -e .
+      run: uv run pip install .
     - name: start compute instance
       run: az ml compute start -n numeraz-ci01 -w numeraz-ws -g numeraz-rg
     - name: run job
