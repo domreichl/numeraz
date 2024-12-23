@@ -40,6 +40,10 @@ jobs:
         WORKSPACE_NAME=${WORKSPACE_NAME}
         ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
         EOF
-    - uses: domreichl/numeraz@main
-    - run: uv pip install .
-    - run: uv run naz pipeline model_training
+    - name: cache venv
+      id: cache-venv
+      uses: actions/cache@v3
+      with:
+        key: venv-cache-${{ hashFiles('**/uv.lock') }}
+        path: .venv
+    - run: naz pipeline model_training
