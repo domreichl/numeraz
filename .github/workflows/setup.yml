@@ -43,18 +43,13 @@ jobs:
       run: uv pip install .
     - name: write .env file
       run: |
-        if [ ! -d ".env" ]; then
-          cat <<EOF > .env
-          SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
-          COMPUTE_INSTANCE=${COMPUTE_INSTANCE}
-          RESOURCE_GROUP=${RESOURCE_GROUP}
-          WORKSPACE_NAME=${WORKSPACE_NAME}
-          ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
-          EOF
-        else
-          echo ".env file already cached"
-          cat .env
-        fi
+        cat <<EOF > .env
+        SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
+        COMPUTE_INSTANCE=${COMPUTE_INSTANCE}
+        RESOURCE_GROUP=${RESOURCE_GROUP}
+        WORKSPACE_NAME=${WORKSPACE_NAME}
+        ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
+        EOF
     # - name: create compute instance
     #   run: az ml compute create -w numeraz-ws -g numeraz-rg -n ${COMPUTE_INSTANCE} --size Standard_E4ds_v4 --type ComputeInstance
     #   continue-on-error: true
