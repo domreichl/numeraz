@@ -1,10 +1,10 @@
-name: unit-tests
+name: setup
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       compute_instance_name:
         default: gha-ci
-        required: false
+        required: true
 jobs:
   build:
     runs-on: ubuntu-latest

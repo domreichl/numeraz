@@ -2,39 +2,41 @@ name: unit-tests
 on:
   workflow_dispatch:
     inputs:
-      subscription_id:
-        required: true
       compute_instance_name:
         default: gha-ci
         required: false
-  push:
-    paths:
-      - "**.py"
-      - "src/**"
+  # push:
+  #   paths:
+  #     - "**.py"
+  #     - "src/**"
 jobs:
   build:
-    runs-on: ubuntu-latest
-    env:
-      SUBSCRIPTION_ID: ${{ github.event.inputs.subscription_id }}
-      COMPUTE_INSTANCE: ${{ github.event.inputs.compute_instance_name }}
-      RESOURCE_GROUP: ${GITHUB_REPOSITORY#*/}-rg
-      WORKSPACE_NAME: ${GITHUB_REPOSITORY#*/}-ws
-      ENVIRONMENT_NAME: ${GITHUB_REPOSITORY#*/}-env
-    steps:
-    - uses: actions/checkout@v2
-    - uses: azure/login@v1
-      with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
-    - name: install uv
-      run: curl -LsSf https://astral.sh/uv/install.sh | sh
-    - name: install venv
-      run: uv venv -p 3.11.10
-    - run: source .venv/bin/activate
-    - name: install dependencies
-      run: uv pip install -r pyproject.toml
-    - name: install naz project
-      run: uv pip install .
-    - run: uv run pytest tests/core
+    uses: numeraz/.github/workflows/setup.yml@main
+    with:
+      compute_instance_name: ${{github.event.inputs.compute_instance_name}}
+    secrets: inherit
+    # runs-on: ubuntu-latest
+    # env:
+    #   SUBSCRIPTION_ID: ${{ github.event.inputs.subscription_id }}
+    #   COMPUTE_INSTANCE: ${{ github.event.inputs.compute_instance_name }}
+    #   RESOURCE_GROUP: ${GITHUB_REPOSITORY#*/}-rg
+    #   WORKSPACE_NAME: ${GITHUB_REPOSITORY#*/}-ws
+    #   ENVIRONMENT_NAME: ${GITHUB_REPOSITORY#*/}-env
+    # steps:
+    # - uses: actions/checkout@v2
+    # - uses: azure/login@v1
+    #   with:
+    #     creds: ${{secrets.AZURE_CREDENTIALS}}
+    # - name: install uv
+    #   run: curl -LsSf https://astral.sh/uv/install.sh | sh
+    # - name: install venv
+    #   run: uv venv -p 3.11.10
+    # - run: source .venv/bin/activate
+    # - name: install dependencies
+    #   run: uv pip install -r pyproject.toml
+    # - name: install naz project
+    #   run: uv pip install .
+    # - run: uv run pytest tests/core
   test:
     needs: build
     runs-on: ubuntu-latest
