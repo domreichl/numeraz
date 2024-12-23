@@ -1,53 +1,21 @@
 name: setup
-on:
-  workflow_call:
-    inputs:
-      compute_instance_name:
-        default: gha-ci
-        type: string
-        required: true
-jobs:
-  called-setup:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: .
-    steps:
-    - uses: actions/checkout@v4
-    - uses: azure/login@v1
-      with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
+description: installs dependencies & naz project
+runs:
+  using: "composite"
+  steps:
     - name: cache az ml extension
       uses: actions/cache@v3
       with:
         key: az-ml-cache
-        path: ~/.azure/cliextensions/ml
+        path: ${{runner.temp}}/cache-linux
     - name: cache venv
       uses: actions/cache@v3
       with:
         key: venv-cache-${{ hashFiles('**/uv.lock') }}
         path: .venv
-    - name: install az ml
-      run: az extension add -n ml -y
-    - name: install uv
-      run: curl -LsSf https://astral.sh/uv/install.sh | sh
-    - name: install venv
-      run: uv venv -p 3.11.10
+    - run: az extension add -n ml -y
+    - run: curl -LsSf https://astral.sh/uv/install.sh | sh
+    - run: uv venv -p 3.11.10
     - run: source .venv/bin/activate
-    - name: install dependencies
-      run: uv pip install -r pyproject.toml
-    - name: install naz project
-      run: uv pip install .
-    - name: write .env file
-      run: |
-        cat <<EOF > .env
-        SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
-        COMPUTE_INSTANCE=${COMPUTE_INSTANCE}
-        RESOURCE_GROUP=${RESOURCE_GROUP}
-        WORKSPACE_NAME=${WORKSPACE_NAME}
-        ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
-        EOF
-    # - name: create compute instance
-    #   run: az ml compute create -w numeraz-ws -g numeraz-rg -n ${COMPUTE_INSTANCE} --size Standard_E4ds_v4 --type ComputeInstance
-    #   continue-on-error: true
+    - run: uv pip install -r pyproject.toml
+    - run: uv pip install .
