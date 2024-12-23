@@ -23,8 +23,7 @@ jobs:
       run: curl -LsSf https://astral.sh/uv/install.sh | sh
     - name: install venv
       run: uv venv -p 3.11.10
-    - name: activate venv
-      run: source .venv/bin/activate
+    - run: source .venv/bin/activate
     - name: install dependencies
       run: uv pip install -r pyproject.toml
     - name: install naz project
@@ -33,11 +32,17 @@ jobs:
       run: |
         az ml compute create -w numeraz-ws -g numeraz-rg \
         -n ${{ github.event.inputs.compute_instance_name }} \
-        --size Standard_E4ds_v4 --type ComputeInstance
+        -d --size Standard_E4ds_v4 --type ComputeInstance
       continue-on-error: true
     - name: start compute instance
       run: az ml compute start -n ${{ github.event.inputs.compute_instance_name }} -w numeraz-ws -g numeraz-rg
       continue-on-error: true
+    - name: update components
+      run: |
+        naz component preprocess_data && \
+        naz component train_base_models && \
+        naz component evaluate_ensembles && \
+        naz component build_prod_model
     - name: write resources.json
       run: |
         cat <<EOF > resources.json
@@ -48,6 +53,4 @@ jobs:
         "environment_name": "${GITHUB_REPOSITORY#*/}-env"}
         EOF
     - name: run job
-      run: uv run naz pipeline model_training --stream-job
-    - name: stop compute instance
-      run: az ml compute stop -n ${{ github.event.inputs.compute_instance_name }} -w numeraz-ws -g numeraz-rg
+      run: uv run naz pipeline model_training
