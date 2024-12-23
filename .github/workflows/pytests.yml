@@ -27,7 +27,9 @@ jobs:
           creds: ${{secrets.AZURE_CREDENTIALS}}
       - uses: domreichl/numeraz@main
         with:
-          compute_instance_name: ${{github.event.inputs.compute_instance_name}}
+          compute_instance: ${COMPUTE_INSTANCE}
+          resource_group: ${RESOURCE_GROUP}
+          workspace_name: ${WORKSPACE_NAME}
       - run: uv run pytest tests/core
       - name: write .env file
         run: |

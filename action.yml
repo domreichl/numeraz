@@ -1,12 +1,16 @@
 name: setup
 description: installs dependencies & naz project
+inputs:
+  compute_instance:
+    description: name of compute instance
+    required: true
 runs:
   using: "composite"
   steps:
-    - name: cache az ml extension
+    - name: cache linux
       uses: actions/cache@v3
       with:
-        key: az-ml-cache
+        key: linux-cache
         path: ${{runner.temp}}/cache-linux
     - name: cache venv
       uses: actions/cache@v3
@@ -25,3 +29,7 @@ runs:
       shell: bash
     - run: uv pip install .
       shell: bash
+    - name: create compute instance
+      run: az ml compute create -w ${GITHUB_REPOSITORY#*/}-ws -g ${GITHUB_REPOSITORY#*/}-rg -n ${inputs.compute_instance} --size Standard_E4ds_v4 --type ComputeInstance
+      shell: bash
+      continue-on-error: true
