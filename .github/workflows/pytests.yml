@@ -7,12 +7,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: /
     steps:
     - uses: actions/checkout@v2
+    - uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
     - name: install uv
       run: curl -LsSf https://astral.sh/uv/install.sh | sh
     - name: install venv
