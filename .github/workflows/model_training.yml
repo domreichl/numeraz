@@ -13,12 +13,6 @@ jobs:
     needs: call-pytests
     runs-on: ubuntu-latest
     environment: dev
-    env:
-      SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-      COMPUTE_INSTANCE: ${{ github.event.inputs.compute_instance }}
-      RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
-      WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
-      ENVIRONMENT_NAME: ${GITHUB_REPOSITORY#*/}-env
     steps:
     - uses: actions/checkout@v4
     - uses: azure/login@v1
@@ -38,7 +32,10 @@ jobs:
           echo "Compute instance is already running."
         fi
     - uses: domreichl/numeraz@main
-    - run: echo $(which naz)
-    - run: echo $(which python)
-    - run: echo $(which uv)
     - run: uv run naz pipeline model_training
+      env:
+        SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+        COMPUTE_INSTANCE: ${{ github.event.inputs.compute_instance }}
+        RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
+        WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
+        ENVIRONMENT_NAME: ${GITHUB_REPOSITORY#*/}-env

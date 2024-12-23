@@ -16,9 +16,6 @@ runs:
         key: uv-cache-${{ hashFiles('**/uv.lock') }}
         path: |
           - .venv
-          - /home/runner/.local/bin/uv
-          - /usr/bin/python
-          - uv.lock
     - if: ${{ steps.cache-uv.outputs.cache-hit != 'true' }}
       run: uv venv -p 3.11.10
       shell: bash
@@ -26,10 +23,4 @@ runs:
       shell: bash
     - if: ${{ steps.cache-uv.outputs.cache-hit != 'true' }}
       run: uv pip install -r pyproject.toml && uv pip install .
-      shell: bash
-    - run: echo $(which naz)
-      shell: bash
-    - run: echo $(which python)
-      shell: bash
-    - run: echo $(which uv)
       shell: bash
