@@ -35,12 +35,6 @@ jobs:
     - name: start compute instance
       run: az ml compute start -n ${{ github.event.inputs.compute_instance_name }} -w numeraz-ws -g numeraz-rg
       continue-on-error: true
-    - name: update components
-      run: |
-        uv run naz component preprocess_data && \
-        uv run naz component train_base_models && \
-        uv run naz component evaluate_ensembles && \
-        uv run naz component build_prod_model
     - name: write resources.json
       run: |
         cat <<EOF > resources.json
@@ -50,5 +44,11 @@ jobs:
         "compute_instance": "${{ github.event.inputs.compute_instance_name }}",
         "environment_name": "${GITHUB_REPOSITORY#*/}-env"}
         EOF
+    - name: update components
+      run: |
+        uv run naz component preprocess_data && \
+        uv run naz component train_base_models && \
+        uv run naz component evaluate_ensembles && \
+        uv run naz component build_prod_model
     - name: run job
       run: uv run naz pipeline model_training
