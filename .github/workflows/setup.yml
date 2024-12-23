@@ -21,7 +21,6 @@ jobs:
       WORKSPACE_NAME: ${{vars.WORKSPACE_NAME}}
       ENVIRONMENT_NAME: ${GITHUB_REPOSITORY#*/}-env
     steps:
-    - uses: actions/checkout@v2
     - uses: azure/login@v1
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
