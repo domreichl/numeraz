@@ -4,6 +4,7 @@ on:
     inputs:
       compute_instance_name:
         default: gha-ci
+        type: string
         required: false
   # push:
   #   paths:
