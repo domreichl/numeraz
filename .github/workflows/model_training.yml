@@ -30,7 +30,7 @@ jobs:
       run: |
         az ml compute create -w numeraz-ws -g numeraz-rg \
         -n ${{ github.event.inputs.compute_instance_name }} \
-        -d 90 --size Standard_E4ds_v4 --type ComputeInstance
+        --size Standard_E4ds_v4 --type ComputeInstance
       continue-on-error: true
     - name: start compute instance
       run: az ml compute start -n ${{ github.event.inputs.compute_instance_name }} -w numeraz-ws -g numeraz-rg
