@@ -8,19 +8,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: azure/login@v1
-      with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
-    - name: install uv
-      run: curl -LsSf https://astral.sh/uv/install.sh | sh
-    - name: install venv
-      run: uv venv -p 3.11.10
+    - run: curl -LsSf https://astral.sh/uv/install.sh | sh
+    - run: uv venv -p 3.11.10
     - run: source .venv/bin/activate
-    - name: install dependencies
-      run: uv pip install -r pyproject.toml
-    - name: install naz project
-      run: uv pip install .
+    - run: uv pip install -r pyproject.toml
+    - run: uv pip install .
   test:
     needs: build
     runs-on: ubuntu-latest
