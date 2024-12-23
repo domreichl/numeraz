@@ -39,7 +39,7 @@ jobs:
     #   run: uv pip install .
     # - run: uv run pytest tests/core
   test:
-    needs: build
+    needs: call-setup
     runs-on: ubuntu-latest
     steps:
     - run: uv run pytest tests/core
