@@ -1,0 +1,24 @@
+name: pipeline-model-training
+on:
+  push:
+    paths:
+      - "**.py"
+      - "src/**"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: install uv
+      run: curl -LsSf https://astral.sh/uv/install.sh | sh
+    - name: install venv
+      run: uv venv -p 3.11.10
+    - run: source .venv/bin/activate
+    - name: install dependencies
+      run: uv pip install -r pyproject.toml
+    - name: install naz project
+      run: uv pip install .
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - run: pytest

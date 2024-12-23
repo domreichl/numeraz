@@ -11,10 +11,8 @@ jobs:
   setup-and-run-pipeline:
     runs-on: ubuntu-latest
     steps:
-    - name: check out repo
-      uses: actions/checkout@v2
-    - name: azure login
-      uses: azure/login@v1
+    - uses: actions/checkout@v2
+    - uses: azure/login@v1
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
     - name: install az ml
@@ -39,10 +37,10 @@ jobs:
       continue-on-error: true
     - name: update components
       run: |
-        naz component preprocess_data && \
-        naz component train_base_models && \
-        naz component evaluate_ensembles && \
-        naz component build_prod_model
+        uv run naz component preprocess_data && \
+        uv run naz component train_base_models && \
+        uv run naz component evaluate_ensembles && \
+        uv run naz component build_prod_model
     - name: write resources.json
       run: |
         cat <<EOF > resources.json
