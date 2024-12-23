@@ -25,13 +25,18 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: cache az ml extension
+      uses: actions/cache@v3
+      with:
+        key: az-ml-cache
+        path: ~/.azure/cliextensions/
     - name: cache venv
       uses: actions/cache@v3
       with:
         key: venv-cache-${{ hashFiles('**/uv.lock') }}
         path: .venv
-    # - name: install az ml
-    #   run: az extension add -n ml -y
+    - name: install az ml
+      run: az extension add -n ml -y
     - name: install uv
       run: curl -LsSf https://astral.sh/uv/install.sh | sh
     - name: install venv
