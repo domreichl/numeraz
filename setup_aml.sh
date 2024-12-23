@@ -35,7 +35,7 @@ az ml compute create -n ${ciName} -t ComputeInstance --size ${COMPUTE_SIZE} -g $
 echo "Creating a virtual environment"
 az ml environment create --name ${env_name} --conda-file $CONDA_FILE -g ${rgName} -w ${wsName} --image $ENV_IMAGE
 
-cat <<EOF > src/.env
+cat <<EOF > .env
 SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
 RESOURCE_GROUP=${rgName}
 WORKSPACE_NAME=${wsName}
