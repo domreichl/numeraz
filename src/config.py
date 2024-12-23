@@ -36,7 +36,8 @@ class Config:
     prod_model_info = "azureml:prod_model_info:0"
 
     # AZURE
-    load_dotenv()
+    if not os.environ.get("SUBSCRIPTION_ID"):
+        load_dotenv()
     subscription_id = os.environ.get("SUBSCRIPTION_ID")
     resource_group = os.environ.get("RESOURCE_GROUP")
     workspace_name = os.environ.get("WORKSPACE_NAME")
