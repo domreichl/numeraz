@@ -28,8 +28,6 @@ jobs:
       - uses: domreichl/numeraz@main
         with:
           compute_instance: ${COMPUTE_INSTANCE}
-          resource_group: ${RESOURCE_GROUP}
-          workspace_name: ${WORKSPACE_NAME}
       - run: uv run pytest tests/core
       - name: write .env file
         run: |
