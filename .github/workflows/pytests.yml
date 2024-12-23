@@ -1,4 +1,4 @@
-name: pytests
+name: unit-tests
 on:
   push:
     paths:
@@ -12,6 +12,7 @@ jobs:
         shell: bash
         working-directory: /
     steps:
+    - uses: actions/checkout@v2
     - name: install uv
       run: curl -LsSf https://astral.sh/uv/install.sh | sh
     - name: install venv
