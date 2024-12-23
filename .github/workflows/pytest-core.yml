@@ -34,7 +34,7 @@ jobs:
       run: uv pip install -r pyproject.toml
     - name: install naz project
       run: uv pip install .
-    - run: uv run pytest -k core
+    - run: uv run pytest -k 'not test_cli'
   test:
     needs: build
     runs-on: ubuntu-latest
