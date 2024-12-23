@@ -9,19 +9,19 @@ runs:
   steps:
     - run: curl -LsSf https://astral.sh/uv/install.sh | sh
       shell: bash
-    - name: cache venv
-      id: cache-venv
+    - name: cache uv
+      id: cache-uv
       uses: actions/cache@v3
       with:
-        key: venv-cache-${{ hashFiles('**/uv.lock') }}
-        path:
+        key: uv-cache-${{ hashFiles('**/uv.lock') }}
+        path: |
           - .venv
           - uv.lock
-    - if: ${{ steps.cache-venv.outputs.cache-hit != 'true' }}
+    - if: ${{ steps.cache-uv.outputs.cache-hit != 'true' }}
       run: uv venv -p 3.11.10
       shell: bash
     - run: source .venv/bin/activate
       shell: bash
-    - if: ${{ steps.cache-venv.outputs.cache-hit != 'true' }}
+    - if: ${{ steps.cache-uv.outputs.cache-hit != 'true' }}
       run: uv pip install -r pyproject.toml && pip install .
       shell: bash

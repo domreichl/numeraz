@@ -37,18 +37,5 @@ jobs:
         else
           echo "Compute instance is already running."
         fi
-    # - name: write .env file
-    #   run: |
-    #     cat <<EOF > .env
-    #     SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
-    #     COMPUTE_INSTANCE=${COMPUTE_INSTANCE}
-    #     RESOURCE_GROUP=${RESOURCE_GROUP}
-    #     WORKSPACE_NAME=${WORKSPACE_NAME}
-    #     ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
-    #     EOF
     - uses: domreichl/numeraz@main
-    - run: |
-        source .venv/bin/activate
-        python --version
-        which uv
-        uv run naz pipeline model_training
+    - run: uv run naz pipeline model_training
