@@ -1,6 +1,7 @@
 name: unit-tests
 on:
   push:
+    workflow_dispatch:
     paths:
       - "**.py"
       - "src/**"
