@@ -19,27 +19,26 @@ jobs:
       RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
       WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
       ENVIRONMENT_NAME: ${GITHUB_REPOSITORY#*/}-env
-      COMPUTE_CONFIG: -n $COMPUTE_INSTANCE -w $WORKSPACE_NAME -g $RESOURCE_GROUP
     steps:
     - uses: actions/checkout@v4
-    - uses: domreichl/numeraz@main
     - uses: azure/login@v1
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
     - run: az extension add -n ml -y
     - name: create compute instance
-      run: az ml compute create ${COMPUTE_CONFIG} --size Standard_E4ds_v4 --type ComputeInstance
+      run: az ml compute create -n ${COMPUTE_INSTANCE} -w ${WORKSPACE_NAME} -g ${RESOURCE_GROUP} --size Standard_E4ds_v4 --type ComputeInstance
       continue-on-error: true
     - name: start compute instance
-      run: az ml compute start ${COMPUTE_CONFIG}
+      run: az ml compute start -n ${COMPUTE_INSTANCE} -w ${WORKSPACE_NAME} -g ${RESOURCE_GROUP}
       continue-on-error: true
     - name: write .env file
       run: |
         cat <<EOF > .env
-        SUBSCRIPTION_ID=$SUBSCRIPTION_ID
-        COMPUTE_INSTANCE=$COMPUTE_INSTANCE
-        RESOURCE_GROUP=$RESOURCE_GROUP
-        WORKSPACE_NAME=$WORKSPACE_NAME
-        ENVIRONMENT_NAME=$ENVIRONMENT_NAME
+        SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
+        COMPUTE_INSTANCE=${COMPUTE_INSTANCE}
+        RESOURCE_GROUP=${RESOURCE_GROUP}
+        WORKSPACE_NAME=${WORKSPACE_NAME}
+        ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
         EOF
+    - uses: domreichl/numeraz@main
     - run: uv run naz pipeline model_training
