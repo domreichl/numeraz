@@ -13,8 +13,6 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
-    - name: install az ml
-      run: az extension add -n ml -y
     - name: install uv
       run: curl -LsSf https://astral.sh/uv/install.sh | sh
     - name: install venv
@@ -24,6 +22,7 @@ jobs:
       run: uv pip install -r pyproject.toml
     - name: install naz project
       run: uv pip install .
+    - run: pytest
   test:
     needs: build
     runs-on: ubuntu-latest
