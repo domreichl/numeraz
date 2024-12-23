@@ -25,17 +25,18 @@ jobs:
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
     - run: az extension add -n ml -y
-    - name: create compute instance
+    - name: create or start compute instance if necessary
       run: |
-        if ! az ml compute show -n ${COMPUTE_INSTANCE} -w ${WORKSPACE_NAME} -g ${RESOURCE_GROUP} &>/dev/null; then
+        status=$(az ml compute show -n ${COMPUTE_INSTANCE} -w ${WORKSPACE_NAME} -g ${RESOURCE_GROUP} --query status -o tsv 2>/dev/null || echo "NotFound")
+        if [ "$status" = "NotFound" ]; then
           echo "Compute instance does not exist. Creating..."
           az ml compute create -n ${COMPUTE_INSTANCE} -w ${WORKSPACE_NAME} -g ${RESOURCE_GROUP} --size Standard_E4ds_v4 --type ComputeInstance
+        elif [ "$status" != "Running" ]; then
+          echo "Compute instance exists but is not running. Starting it..."
+          az ml compute start -n ${COMPUTE_INSTANCE} -w ${WORKSPACE_NAME} -g ${RESOURCE_GROUP}
         else
-          echo "Compute instance already exists. Skipping creation."
+          echo "Compute instance is already running."
         fi
-    - name: start compute instance
-      run: az ml compute start -n ${COMPUTE_INSTANCE} -w ${WORKSPACE_NAME} -g ${RESOURCE_GROUP}
-      continue-on-error: true
     - name: write .env file
       run: |
         cat <<EOF > .env
@@ -45,8 +46,5 @@ jobs:
         WORKSPACE_NAME=${WORKSPACE_NAME}
         ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
         EOF
-    - uses: actions/cache@v3
-      with:
-        key: venv-cache-${{ hashFiles('**/uv.lock') }}
-        path: .venv
+    - uses: domreichl/numeraz@main
     - run: uv run naz pipeline model_training
