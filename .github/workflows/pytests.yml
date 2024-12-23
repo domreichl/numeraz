@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: action.yml
+      - uses: domreichl/numeraz@main
         with:
           compute_instance_name: ${{github.event.inputs.compute_instance_name}}
       - run: uv run pytest tests/core
