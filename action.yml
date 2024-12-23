@@ -14,8 +14,7 @@ runs:
       uses: actions/cache@v3
       with:
         key: uv-cache-${{ hashFiles('**/uv.lock') }}
-        path: |
-          - .venv
+        path: .venv
     - if: ${{ steps.cache-uv.outputs.cache-hit != 'true' }}
       run: uv venv -p 3.11.10
       shell: bash
