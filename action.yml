@@ -13,13 +13,6 @@ jobs:
       run:
         shell: bash
         working-directory: .
-    environment: dev
-    env:
-      SUBSCRIPTION_ID: ${{secrets.SUBSCRIPTION_ID}}
-      COMPUTE_INSTANCE: ${{github.event.inputs.compute_instance_name}}
-      RESOURCE_GROUP: ${{vars.RESOURCE_GROUP}}
-      WORKSPACE_NAME: ${{vars.WORKSPACE_NAME}}
-      ENVIRONMENT_NAME: ${GITHUB_REPOSITORY#*/}-env
     steps:
     - uses: actions/checkout@v4
     - uses: azure/login@v1

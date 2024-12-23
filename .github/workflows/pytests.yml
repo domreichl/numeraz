@@ -13,9 +13,16 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - uses: actions/checkout@v4
       - uses: domreichl/numeraz@main
+        env:
+          SUBSCRIPTION_ID: ${{secrets.SUBSCRIPTION_ID}}
+          COMPUTE_INSTANCE: ${{github.event.inputs.compute_instance_name}}
+          RESOURCE_GROUP: ${{vars.RESOURCE_GROUP}}
+          WORKSPACE_NAME: ${{vars.WORKSPACE_NAME}}
+          ENVIRONMENT_NAME: ${GITHUB_REPOSITORY#*/}-env
         with:
           compute_instance_name: ${{github.event.inputs.compute_instance_name}}
       - run: uv run pytest tests/core
