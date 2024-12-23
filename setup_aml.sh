@@ -6,6 +6,11 @@ COMPUTE_SIZE="Standard_E4ds_v4"
 CONDA_FILE="conda.yml"
 ENV_IMAGE="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04"
 
+rgName="${PROJECT_DIR}-rg"
+wsName="${PROJECT_DIR}-ws"
+ciName="${PROJECT_DIR}-ci01"
+envName="${PROJECT_DIR}-env"
+
 read -p "Azure Subscription ID: " SUBSCRIPTION_ID
 
 echo "Installing Azure CLI"
@@ -19,26 +24,23 @@ echo "Logging in"
 az login
 
 echo "Creating a resource group"
-az group create -n "${PROJECT_DIR}-rg" -l ${LOCATION}
+az group create -n ${rgName} -l ${LOCATION}
 
 echo "Creating a workspace"
-az ml workspace create -n "${PROJECT_DIR}-ws" -g "${PROJECT_DIR}-rg" -l ${LOCATION}
+az ml workspace create -n ${wsName} -g ${rgName} -l ${LOCATION}
 
 echo "Creating a compute instance"
-az ml compute create -n "${PROJECT_DIR}-ci01" -t ComputeInstance --size ${COMPUTE_SIZE} -g "${PROJECT_DIR}-rg" -w "${PROJECT_DIR}-ws"
+az ml compute create -n ${ciName} -t ComputeInstance --size ${COMPUTE_SIZE} -g ${rgName} -w ${wsName}
 
 echo "Creating a virtual environment"
-envName="${PROJECT_DIR}-env"
-az ml environment create --name ${env_name} --conda-file $CONDA_FILE -g "${PROJECT_DIR}-rg" -w "${PROJECT_DIR}-ws" --image $ENV_IMAGE
+az ml environment create --name ${env_name} --conda-file $CONDA_FILE -g ${rgName} -w ${wsName} --image $ENV_IMAGE
 
-cat <<EOF > resources.json
-{
-  "subscription_id": "${SUBSCRIPTION_ID}",
-  "resource_group": "${PROJECT_DIR}-rg",
-  "workspace_name": "${PROJECT_DIR}-ws",
-  "compute_instance": "${PROJECT_DIR}-ci01",
-  "environment_name": "${PROJECT_DIR}-env"
-}
+cat <<EOF > src/.env
+SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
+RESOURCE_GROUP=${rgName}
+WORKSPACE_NAME=${wsName}
+COMPUTE_INSTANCE=${ciName}
+ENVIRONMENT_NAME=${envName}
 EOF
 
 

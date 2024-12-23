@@ -1,7 +1,9 @@
 import datetime as dt
-import json
+import os
 from dataclasses import dataclass
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 
 @dataclass
@@ -34,16 +36,11 @@ class Config:
     prod_model_info = "azureml:prod_model_info:0"
 
     # AZURE
-    with open("resources.json") as file:
-        resources = json.load(file)
-    subscription_id = resources["subscription_id"]
-    resource_group = resources["resource_group"]
-    workspace_name = resources["workspace_name"]
-    compute_instance = resources["compute_instance"]
-    environment_name = resources["environment_name"]
-
+    load_dotenv()
+    subscription_id = os.environ.get("SUBSCRIPTION_ID")
+    resource_group = os.environ.get("RESOURCE_GROUP")
+    workspace_name = os.environ.get("WORKSPACE_NAME")
+    compute_instance = os.environ.get("COMPUTE_INSTANCE")
+    environment_name = os.environ.get("ENVIRONMENT_NAME")
     latest_env_name = ""
-
-    # PATHS
     src_path = str(Path(__file__).parent)
-    conda_file_path = str(Path(__file__).parent.parent / "conda.yml")

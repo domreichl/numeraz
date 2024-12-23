@@ -1,6 +1,12 @@
 name: unit-tests
 on:
   workflow_dispatch:
+    inputs:
+      subscription_id:
+        required: true
+      compute_instance_name:
+        default: gha-ci
+        required: false
   push:
     paths:
       - "**.py"
@@ -8,6 +14,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SUBSCRIPTION_ID: ${{ github.event.inputs.subscription_id }}
+      COMPUTE_INSTANCE: ${{ github.event.inputs.compute_instance_name }}
+      RESOURCE_GROUP: ${GITHUB_REPOSITORY#*/}-rg
+      WORKSPACE_NAME: ${GITHUB_REPOSITORY#*/}-ws
+      ENVIRONMENT_NAME: ${GITHUB_REPOSITORY#*/}-env
     steps:
     - uses: actions/checkout@v2
     - uses: azure/login@v1
