@@ -11,7 +11,7 @@ class Config:
     experiment_name = "initial"
     feature_set = "small"  # "medium"
     hparams = {
-        "n_estimators": 9000,  # 15000,
+        "n_estimators": 8000,  # 15000,
         "max_depth": 5,
         "num_leaves": 21,
         "learning_rate": 0.01,
