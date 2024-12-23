@@ -14,8 +14,14 @@ runs:
         key: venv-cache-${{ hashFiles('**/uv.lock') }}
         path: .venv
     - run: az extension add -n ml -y
+      shell: bash
     - run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      shell: bash
     - run: uv venv -p 3.11.10
+      shell: bash
     - run: source .venv/bin/activate
+      shell: bash
     - run: uv pip install -r pyproject.toml
+      shell: bash
     - run: uv pip install .
+      shell: bash
