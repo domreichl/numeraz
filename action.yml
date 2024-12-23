@@ -1,28 +1,10 @@
 name: setup
-description: installation of virtual environment
-inputs:
-  compute_instance:
-    description: name of compute instance
-    required: true
+description: installs uv, venv, dependencies, and naz project
 runs:
   using: "composite"
   steps:
     - run: curl -LsSf https://astral.sh/uv/install.sh | sh
       shell: bash
-    # - name: cache uv
-    #   id: cache-uv
-    #   uses: actions/cache@v3
-    #   with:
-    #     key: uv-cache-${{ hashFiles('**/uv.lock') }}
-    #     path: .venv
-    # - if: ${{ steps.cache-uv.outputs.cache-hit != 'true' }}
-    #   run: uv venv -p 3.11.10
-    #   shell: bash
-    # - run: source .venv/bin/activate
-    #   shell: bash
-    # - if: ${{ steps.cache-uv.outputs.cache-hit != 'true' }}
-    #   run: uv pip install -r pyproject.toml && uv pip install .
-    #   shell: bash
     - run: uv venv -p 3.11.10
       shell: bash
     - run: source .venv/bin/activate
