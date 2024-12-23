@@ -41,4 +41,5 @@ jobs:
         ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
         EOF
     - uses: domreichl/numeraz@main
+    - run: uv pip install .
     - run: uv run naz pipeline model_training
