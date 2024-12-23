@@ -11,7 +11,7 @@ on:
   #     - "src/**"
 jobs:
   build:
-    uses: domreichl/numeraz/.github/workflows/setup.yml@main
+    uses: ./.github/workflows/setup.yml
     with:
       compute_instance_name: ${{github.event.inputs.compute_instance_name}}
     secrets: inherit
