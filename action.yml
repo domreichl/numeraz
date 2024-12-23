@@ -25,3 +25,9 @@ runs:
     - if: ${{ steps.cache-uv.outputs.cache-hit != 'true' }}
       run: uv pip install -r pyproject.toml && pip install .
       shell: bash
+    - run: echo $(which naz)
+      shell: bash
+    - run: echo $(which python)
+      shell: bash
+    - run: echo $(which uv)
+      shell: bash

@@ -38,4 +38,7 @@ jobs:
           echo "Compute instance is already running."
         fi
     - uses: domreichl/numeraz@main
+    - run: echo $(which naz)
+    - run: echo $(which python)
+    - run: echo $(which uv)
     - run: uv run naz pipeline model_training
