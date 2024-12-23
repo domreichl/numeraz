@@ -18,7 +18,7 @@ jobs:
       COMPUTE_INSTANCE: ${{ github.event.inputs.compute_instance }}
       RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
       WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
-      ENVIRONMENT_NAME: ${GITHUB_REPOSITORY#*/}-env
+      ENVIRONMENT_NAME: ${{ vars.ENVIRONMENT_NAME }}
     steps:
     - uses: actions/checkout@v4
     - uses: azure/login@v1
@@ -38,9 +38,4 @@ jobs:
           echo "Compute instance is already running."
         fi
     - uses: domreichl/numeraz@main
-    - run: echo $SUBSCRIPTION_ID
-    - run: echo $COMPUTE_INSTANCE
-    - run: echo $RESOURCE_GROUP
-    - run: echo $WORKSPACE_NAME
-    - run: echo $ENVIRONMENT_NAME
     - run: uv run naz pipeline model_training
