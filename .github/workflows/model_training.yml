@@ -47,5 +47,6 @@ jobs:
     #     ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
     #     EOF
     - uses: domreichl/numeraz@main
-    - run: source .venv/bin/activate
-    - run: uv run naz pipeline model_training
+    - run: |
+        source .venv/bin/activate
+        uv run naz pipeline model_training
