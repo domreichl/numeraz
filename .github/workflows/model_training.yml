@@ -38,8 +38,8 @@ jobs:
           echo "Compute instance is already running."
         fi
     - uses: domreichl/numeraz@main
-    - run: uv run naz component preprocess_data
-    - run: uv run naz component train_base_models
-    - run: uv run naz component evaluate_ensembles
-    - run: uv run naz component build_prod_model
+    # - run: uv run naz component preprocess_data
+    # - run: uv run naz component train_base_models
+    # - run: uv run naz component evaluate_ensembles
+    # - run: uv run naz component build_prod_model
     - run: uv run naz pipeline model_training --force-rerun
