@@ -11,10 +11,10 @@ on:
   #     - "**.py"
   #     - "src/**"
 jobs:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: ./.github/workflows/setup.yml
-      with:
-        compute_instance_name: ${{github.event.inputs.compute_instance_name}}
-      secrets: inherit
-    - run: uv run pytest tests/core
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/workflows/setup.yml
+        with:
+          compute_instance_name: ${{github.event.inputs.compute_instance_name}}
+      - run: uv run pytest tests/core
