@@ -26,8 +26,13 @@ jobs:
         creds: ${{secrets.AZURE_CREDENTIALS}}
     - run: az extension add -n ml -y
     - name: create compute instance
-      run: az ml compute create -n ${COMPUTE_INSTANCE} -w ${WORKSPACE_NAME} -g ${RESOURCE_GROUP} --size Standard_E4ds_v4 --type ComputeInstance
-      continue-on-error: true
+      run: |
+        if ! az ml compute show -n ${COMPUTE_INSTANCE} -w ${WORKSPACE_NAME} -g ${RESOURCE_GROUP} &>/dev/null; then
+          echo "Compute instance does not exist. Creating..."
+          az ml compute create -n ${COMPUTE_INSTANCE} -w ${WORKSPACE_NAME} -g ${RESOURCE_GROUP} --size Standard_E4ds_v4 --type ComputeInstance
+        else
+          echo "Compute instance already exists. Skipping creation."
+        fi
     - name: start compute instance
       run: az ml compute start -n ${COMPUTE_INSTANCE} -w ${WORKSPACE_NAME} -g ${RESOURCE_GROUP}
       continue-on-error: true
@@ -40,10 +45,8 @@ jobs:
         WORKSPACE_NAME=${WORKSPACE_NAME}
         ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
         EOF
-    - name: cache venv
-      id: cache-venv
-      uses: actions/cache@v3
+    - uses: actions/cache@v3
       with:
         key: venv-cache-${{ hashFiles('**/uv.lock') }}
         path: .venv
-    - run: naz pipeline model_training
+    - run: uv run naz pipeline model_training
