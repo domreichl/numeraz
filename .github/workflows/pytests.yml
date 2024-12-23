@@ -11,7 +11,7 @@ jobs:
     - run: curl -LsSf https://astral.sh/uv/install.sh | sh
     - run: uv venv -p 3.11.10
     - run: source .venv/bin/activate
-    - run: ls .
+    - run: ls ${{ github.workspace }}
     - run: uv pip install -r pyproject.toml
     - run: uv pip install .
   test:
