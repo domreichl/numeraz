@@ -14,6 +14,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: ./.github/workflows/setup.yml
         with:
           compute_instance_name: ${{github.event.inputs.compute_instance_name}}
