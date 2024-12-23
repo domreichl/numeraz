@@ -14,7 +14,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: numeraz/checkout@main
       - uses: ./.github/workflows/setup.yml
         with:
           compute_instance_name: ${{github.event.inputs.compute_instance_name}}
