@@ -16,3 +16,4 @@ dependencies:
     - numerapi>=2.19.1
     - pyarrow>=18.1.0
     - scikit-learn>=1.5.2
+    - tensorflow-cpu>=2.17.0

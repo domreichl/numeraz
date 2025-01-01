@@ -9,17 +9,18 @@ from dotenv import load_dotenv
 @dataclass
 class Config:
     # PARAMS
-    model_name = "WISIGERNAZ"
-    experiment_name = "initial"
-    feature_set = "small"  # "medium"
+    model_name = "AENCAZ"  # "WISIGERNAZ"
+    experiment_name = "aencaz"  # "initial"
+    feature_set = "aenc"  # "small"
     hparams = {
-        "n_estimators": 8000,  # 15000,
+        "n_estimators": 15000,  # 8000,
         "max_depth": 5,
         "num_leaves": 21,
         "learning_rate": 0.01,
         "colsample_bytree": 0.1,
         "min_child_samples": 200,
     }
+    encoder_uri = "models:/autoenc_orig/4"
     component_inputs = {
         "train_data": "azureml:azureml_994d2f8d-a4d6-410f-8bb1-e62d14dfc5d6_output_data_train_data:1",
         "test_data": "azureml:azureml_994d2f8d-a4d6-410f-8bb1-e62d14dfc5d6_output_data_test_data:1",

@@ -1,6 +1,7 @@
-import pytest
-import pandas as pd
 from unittest.mock import patch
+
+import pandas as pd
+import pytest
 
 from src.core.preprocessing import DataPreprocessor
 
@@ -109,14 +110,9 @@ def test_split_x_y(data_preprocessor: DataPreprocessor):
         }
     )
 
-    x, y = data_preprocessor.split_x_y(df, x_with_era=False)
+    x, y = data_preprocessor.split_x_y(df)
 
     assert list(x.columns) == ["feature1"]
-    assert len(y.columns) == 4
-
-    x, y = data_preprocessor.split_x_y(df, x_with_era=True)
-
-    assert list(x.columns) == ["era", "feature1"]
     assert len(y.columns) == 4
 
 

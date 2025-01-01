@@ -18,6 +18,7 @@ dependencies = [
     "pytest>=8.3.4",
     "python-dotenv>=1.0.1",
     "scikit-learn>=1.5.2",
+    "tensorflow-cpu==2.17.0",
 ]
 
 [tool.pytest.ini_options]
