@@ -103,7 +103,7 @@ with mlflow.start_run() as run:
             "run_name": run.info.run_name,
             "run_id": run.info.run_id,
             "main_target": main_target,
-            "feature_set": args["feature_set"],
+            "feature_set": "aenc",
             "train_eras": dp.get_era_range(y_train),
             "test_eras": dp.get_era_range(y_test),
             "base_model": "lightgbm",
