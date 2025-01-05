@@ -42,7 +42,7 @@ models_dir = args["prod_model_dir"]
 with open(args["best_ensemble"], "r") as file:
     best_ensemble: dict = json.load(file)
 ensembling_method: str = best_ensemble["ensembling_method"]
-target_names = [m.lstrip("pred_") for m in best_ensemble["models"]]
+target_names = [m.replace("pred_", "") for m in best_ensemble["models"]]
 targets = [f"target_{name}_20" for name in target_names]
 ensemble = "-".join(target_names)
 

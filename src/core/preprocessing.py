@@ -1,4 +1,5 @@
 import os
+
 import pandas as pd
 
 
@@ -74,12 +75,9 @@ class DataPreprocessor:
         test = df[df["era"].isin(eras[split + self.eras_to_embargo :])]
         return train, test
 
-    def split_x_y(self, df: pd.DataFrame, x_with_era=False) -> tuple:
+    def split_x_y(self, df: pd.DataFrame) -> tuple:
         df = df.reset_index()
-        if x_with_era:
-            x = df[["era"] + [col for col in df.columns if col.startswith("feature")]]
-        else:
-            x = df[[col for col in df.columns if col.startswith("feature")]]
+        x = df[sorted([col for col in df.columns if col.startswith("feat")])]
         y = df[
             ["id", "era", "numerai_meta_model"]
             + [col for col in df.columns if col.startswith("target")]
