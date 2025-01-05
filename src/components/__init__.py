@@ -89,6 +89,30 @@ class Components:
             **self.arguments,
         )
 
+    def _build_prod_model_aenc(self, name: str) -> CommandComponent:
+        args = f"--subscription_id {self.config.subscription_id} --resource_group {self.config.resource_group} --workspace_name {self.config.workspace_name}"
+        args += f" --experiment_name {self.config.experiment_name} --model_name {self.config.model_name} --main_target {self.config.main_target}"
+        args += f" --hparams '{json.dumps(self.config.hparams)}' --encoder_uri {self.config.encoder_uri}"
+        args += " --data_uri ${{inputs.data_uri}} --train_data ${{inputs.train_data}} --test_data ${{inputs.test_data}} --zero_cols ${{inputs.zero_cols}}"
+        args += " --best_ensemble ${{inputs.best_ensemble}} --prod_model_info ${{inputs.prod_model_info}} --prod_model_dir ${{outputs.prod_model_dir}}"
+        return CommandComponent(
+            name=name,
+            display_name=name,
+            command=self.command.format(name=name, args=args),
+            inputs={
+                "data_uri": Input(path=self.config.data_asset_uri, mode="direct"),
+                "zero_cols": Input(type="uri_file"),
+                "train_data": Input(type="uri_file"),
+                "test_data": Input(type="uri_file"),
+                "best_ensemble": Input(type="uri_file"),
+                "prod_model_info": Input(
+                    path=self.config.prod_model_info, mode="direct"
+                ),
+            },
+            outputs={"prod_model_dir": Output(type="uri_folder")},
+            **self.arguments,
+        )
+
     def _encode_features(self, name: str) -> CommandComponent:
         args = f"--encoder_uri {self.config.encoder_uri}"
         args += " --data_uri ${{inputs.data_uri}} --zero_cols ${{outputs.zero_cols}}"
